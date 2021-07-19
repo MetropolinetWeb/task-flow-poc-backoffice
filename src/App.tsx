@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.css';
 import 'react-calendar-timeline/lib/Timeline.css';
-import PersistentDrawerLeft from './components/sideMenu';
 import Timeline from 'react-calendar-timeline';
 import PanelGroup from 'react-panelgroup';
 import FullWidthTabs  from './components/FullWidthTabs'
@@ -9,6 +8,8 @@ import { Button, ListItemIcon } from '@material-ui/core';
 import moment from 'moment';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
 import TaskData from './components/TaskData';
+import { useState } from 'react';
+import SideMenu from './components/SideMenu';
 
 
 const agents = [{ id: 1, title: 'דוד דוד',rightTitle: 'side title'}, 
@@ -79,15 +80,32 @@ const tasks = [
 ]
 
 
-
-
-
-
 function App() {
+  const [show, setShow] = useState({Users:true, Systems:true, Tasks:false, Forms:true, Agents:true});
+
+  const displayShow = (divName: string) => {
+    switch(divName){
+      case 'users': setShow({Users:false, Systems:true, Tasks:true, Forms:true, Agents:true});
+        break;
+      case 'systems': setShow({Users:true, Systems:false, Tasks:true, Forms:true, Agents:true});
+        break;
+      case 'tasks': setShow({Users:true, Systems:true, Tasks:false, Forms:true, Agents:true});
+        break;
+      case 'forms': setShow({Users:true, Systems:true, Tasks:true, Forms:false, Agents:true});
+        break;
+      case 'agents': setShow({Users:true, Systems:true, Tasks:true, Forms:true, Agents:false});
+        break;
+    }
+  };
+
+
+
   return (
-    <div className="App">
-      <PersistentDrawerLeft></PersistentDrawerLeft>
-      <Timeline groups={agents} items={tasks} defaultTimeStart={moment().add(-12, 'hour')} defaultTimeEnd={moment().add(12, 'hour')}/>
+    
+    <div className="App" hidden={show.Tasks}>
+      <SideMenu></SideMenu>
+      <div id="tasks" >
+        <Timeline groups={agents} items={tasks} defaultTimeStart={moment().add(-12, 'hour')} defaultTimeEnd={moment().add(12, 'hour')}/>
         <PanelGroup>
           <div className="panel">
             <TaskData />
@@ -99,6 +117,12 @@ function App() {
         <div>
           <Button variant="contained" color="primary">NEW TASK<ListItemIcon><LibraryAddIcon /></ListItemIcon></Button>
         </div>
+      </div>
+      <div id="users"   hidden={show.Users}>USERS</div>
+      <div id="systems" hidden={show.Systems}>SYSTEMS</div>
+      <div id="tasks"   hidden={show.Tasks}>TASKS</div>
+      <div id="forms"   hidden={show.Forms}>FORMS</div>
+      <div id="agents"  hidden={show.Agents}>AGENTS</div>
     </div>
   );
 }
