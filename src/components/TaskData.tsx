@@ -24,6 +24,7 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
+import axios from "axios";
 
 interface Data {
   name: string;
@@ -33,9 +34,33 @@ interface Data {
   start_time: number;
   duration: number;
   assignment_info: string;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
+
+interface Task {
+  name: string;
+  type: string;
+  state: {
+    availableStates: string[],
+    stateHistory: {
+      updatedAt: string,
+      createdAt: string,
+      previousState: string,
+      currentState: string
+    }[]
+  };
+  description: string;
+  start_time: number;
+  duration: number;
+  assignment_info: {
+    agent_id: string,
+    agent_name: string,
+  };
+  created_at: string;
+  updated_at: string;
+}
+
 
 function createData(
   name: string,
@@ -45,8 +70,8 @@ function createData(
   start_time: number,
   duration: number,
   assignment_info: string,
-  createdAt: string,
-  updatedAt: string
+  created_at: string,
+  updated_at: string
 ): Data {
   return {
     name,
@@ -56,8 +81,8 @@ function createData(
     start_time,
     duration,
     assignment_info,
-    createdAt,
-    updatedAt,
+    created_at,
+    updated_at,
   };
 }
 
@@ -69,7 +94,7 @@ const rows = [
     "test task description",
     4.3,
     0,
-    'itsik_agent',
+    "itsik_agent",
     "19/10/1997",
     "19/10/1997"
   ),
@@ -119,6 +144,7 @@ interface HeadCell {
 const headCells: HeadCell[] = [
   { id: "name", numeric: false, disablePadding: true, label: "Name" },
   { id: "type", numeric: false, disablePadding: false, label: "Type" },
+  { id: "state", numeric: false, disablePadding: false, label: "State" },
   {
     id: "description",
     numeric: false,
@@ -132,7 +158,6 @@ const headCells: HeadCell[] = [
     disablePadding: false,
     label: "Start Time",
   },
-  { id: "state", numeric: false, disablePadding: false, label: "State" },
   {
     id: "assignment_info",
     numeric: false,
@@ -140,13 +165,13 @@ const headCells: HeadCell[] = [
     label: "Assigned to",
   },
   {
-    id: "createdAt",
+    id: "created_at",
     numeric: false,
     disablePadding: false,
     label: "Created At",
   },
   {
-    id: "updatedAt",
+    id: "updated_at",
     numeric: false,
     disablePadding: false,
     label: "Updated At",
@@ -325,6 +350,8 @@ export default function EnhancedTable() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  const [dataRows, setDataRows] = React.useState<Data[]>([]);
+
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -383,6 +410,40 @@ export default function EnhancedTable() {
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+  const fetchData = () => {
+    const response = axios
+      .get("http://localhost:8000/gateway/v1/tasks/60f562dd2f1e380030b1ecbf", {
+        headers: {
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGU1YjI4NTQ3YTBmMDAwMmZiNWUzYzkiLCJpYXQiOjE2MjY2MDk0ODIsImV4cCI6MTYyOTIwMTQ4Mn0.gLHb_V-9eTBlhoMtb1OD6GuHv4oTcbLatufJ5WXMnU8",
+        },
+      })
+      .then((response) => {
+        console.log(response.data.data, 'response')
+        const tasks: Task[] = [response.data.data];
+        const modifiedTasks = tasks.map((task) => {
+          console.log(task.state.stateHistory)
+          return createData(
+            task.name,
+            task.type,
+            task.state.stateHistory[0].currentState,
+            task.description,
+            task.start_time,
+            task.duration,
+            task.assignment_info.agent_name || 'task is not assigned',
+            task.created_at,
+            task.updated_at
+          );
+        });
+
+        setDataRows(modifiedTasks);
+      });
+  };
+
+  React.useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -404,7 +465,7 @@ export default function EnhancedTable() {
               rowCount={rows.length}
             />
             <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
+              {stableSort(dataRows || [], getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
@@ -434,15 +495,14 @@ export default function EnhancedTable() {
                       >
                         {row.name}
                       </TableCell>
-                      <TableCell align="right">{row.name}</TableCell>
                       <TableCell align="right">{row.type}</TableCell>
-                      <TableCell align="right">{row.description}</TableCell>
-                      <TableCell align="right">{row.duration}</TableCell>
-                      <TableCell align="right">{row.createdAt}</TableCell>
-                      <TableCell align="right">{row.updatedAt}</TableCell>
-                      <TableCell align="right">{row.assignment_info}</TableCell>
                       <TableCell align="right">{row.state}</TableCell>
+                      <TableCell align="right">{row.description}</TableCell>
                       <TableCell align="right">{row.start_time}</TableCell>
+                      <TableCell align="right">{row.duration}</TableCell>
+                      <TableCell align="right">{row.assignment_info}</TableCell>
+                      <TableCell align="right">{row.created_at}</TableCell>
+                      <TableCell align="right">{row.updated_at}</TableCell>
                     </TableRow>
                   );
                 })}
