@@ -412,17 +412,16 @@ export default function EnhancedTable() {
 
   const fetchData = () => {
     const response = axios
-      .get("http://localhost:8000/gateway/v1/tasks/60f562dd2f1e380030b1ecbf", {
+      .get("http://localhost:8000/gateway/v1/tasks/systems/3", {
         headers: {
           Authorization:
             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGU1YjI4NTQ3YTBmMDAwMmZiNWUzYzkiLCJpYXQiOjE2MjY2MDk0ODIsImV4cCI6MTYyOTIwMTQ4Mn0.gLHb_V-9eTBlhoMtb1OD6GuHv4oTcbLatufJ5WXMnU8",
         },
       })
       .then((response) => {
-        console.log(response.data.data, 'response')
-        const tasks: Task[] = [response.data.data];
-        const modifiedTasks = tasks.map((task) => {
-          console.log(task.state.stateHistory)
+        console.log(response.data.data.tasks, 'response')
+        const tasks: Task[] = response.data.data.tasks || [];
+        const modifiedTasks = tasks.map((task: Task) => {
           return createData(
             task.name,
             task.type,
