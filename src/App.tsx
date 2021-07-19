@@ -8,6 +8,7 @@ import FullWidthTabs  from './components/FullWidthTabs'
 import { Button, ListItemIcon } from '@material-ui/core';
 import moment from 'moment';
 import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
+import TaskData from './components/TaskData';
 
 
 const agents = [{ id: 1, title: 'דוד דוד',rightTitle: 'side title'}, 
@@ -88,7 +89,9 @@ function App() {
       <PersistentDrawerLeft></PersistentDrawerLeft>
       <Timeline groups={agents} items={tasks} defaultTimeStart={moment().add(-12, 'hour')} defaultTimeEnd={moment().add(12, 'hour')}/>
         <PanelGroup>
-          <div className="panel"></div>
+          <div className="panel">
+            <TaskData />
+          </div>
           <div className="panel">
             <FullWidthTabs />
           </div>
