@@ -1,99 +1,42 @@
 import React from 'react';
+import { useState } from 'react';
 import './App.css';
 import 'react-calendar-timeline/lib/Timeline.css';
-import Timeline from 'react-calendar-timeline';
-import PanelGroup from 'react-panelgroup';
-import FullWidthTabs  from './components/FullWidthTabs'
-import { Button, ListItemIcon } from '@material-ui/core';
-import moment from 'moment';
-import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
-import TaskData from './components/TaskData';
-import { useState } from 'react';
+
 import SideMenu from './components/SideMenu';
+import UsersPage from './pages/Users';
+import AgentsPage from './pages/Agents';
+import FormsPage from './pages/Forms';
+import StatsPage from './pages/Stats';
+import TasksPage from './pages/Tasks';
+import UploadFilesPage from './pages/UploadFiles';
+import SystemsPage from './pages/Systems';
+import DashboardsPage from './pages/Dashboards';
 
 
-const agents = [{ id: 1, title: 'דוד דוד',rightTitle: 'side title'}, 
-                { id: 2, title: 'ג`ק הרר',rightTitle: 'side title'}, 
-                { id: 3, title: 'רמי לוי',rightTitle: 'side title'}]
 
-const tasks = [
-  {
-    id: 1,
-    group: 1,
-    title: 'קריאת מד',
-    start_time: moment(),
-    end_time: moment().add(1, 'hour'),
-    canMove: true,
-    canResize: true,
-    canChangeGroup: true,
-    itemProps: {
-      // these optional attributes are passed to the root <div /> of each item as <div {...itemProps} />
-      'data-custom-attribute': 'Random content',
-      'aria-hidden': true,
-      onDoubleClick: () => { alert('Show task details') },
-      className: 'weekend',
-      style: {
-        background: 'green'
-      }
-    }
-  },
-  {
-    id: 2,
-    group: 2,
-    title: 'התנקשות',
-    start_time: moment().add(-0.5, 'hour'),
-    end_time: moment().add(0.5, 'hour'),
-    canMove: true,
-    canResize: true,
-    canChangeGroup: true,
-    itemProps: {
-      // these optional attributes are passed to the root <div /> of each item as <div {...itemProps} />
-      'data-custom-attribute': 'Random content',
-      'aria-hidden': true,
-      onDoubleClick: () => { alert('Show task details') },
-      className: 'weekend',
-      style: {
-        background: 'red'
-      }
-    }
-  },
-  {
-    id: 3,
-    group: 1,
-    title: 'גביה',
-    start_time: moment().add(2, 'hour'),
-    end_time: moment().add(3, 'hour'),
-    canMove: true,
-    canResize: true,
-    canChangeGroup: true,
-    itemProps: {
-      // these optional attributes are passed to the root <div /> of each item as <div {...itemProps} />
-      'data-custom-attribute': 'Random content',
-      'aria-hidden': true,
-      onDoubleClick: () => { alert('Show task details') },
-      className: 'weekend',
-      style: {
-        background: 'blue'
-      }
-    }
-  }
-]
 
 
 function App() {
-  const [show, setShow] = useState({Users:true, Systems:true, Tasks:false, Forms:true, Agents:true});
+  const [show, setShow] = useState({Users:true, Systems:true, Tasks:false, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:true});
 
-  const displayShow = (divName: string) => {
-    switch(divName){
-      case 'users': setShow({Users:false, Systems:true, Tasks:true, Forms:true, Agents:true});
+  const changeView = (view: string) => {
+    switch(view){
+      case 'Users': setShow({Users:false, Systems:true, Tasks:true, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:true});
         break;
-      case 'systems': setShow({Users:true, Systems:false, Tasks:true, Forms:true, Agents:true});
+      case 'Systems': setShow({Users:true, Systems:false, Tasks:true, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:true});
         break;
-      case 'tasks': setShow({Users:true, Systems:true, Tasks:false, Forms:true, Agents:true});
+      case 'Tasks': setShow({Users:true, Systems:true, Tasks:false, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:true});
         break;
-      case 'forms': setShow({Users:true, Systems:true, Tasks:true, Forms:false, Agents:true});
+      case 'Forms': setShow({Users:true, Systems:true, Tasks:true, Forms:false, Agents:true, Dashboard:true, Stats:true, UploadFIles:true});
         break;
-      case 'agents': setShow({Users:true, Systems:true, Tasks:true, Forms:true, Agents:false});
+      case 'Agents': setShow({Users:true, Systems:true, Tasks:true, Forms:true, Agents:false, Dashboard:true, Stats:true, UploadFIles:true});
+        break;
+      case 'Dashboards': setShow({Users:true, Systems:true, Tasks:true, Forms:true, Agents:true, Dashboard:false, Stats:true, UploadFIles:true});
+        break;
+      case 'Stats': setShow({Users:true, Systems:true, Tasks:true, Forms:true, Agents:true, Dashboard:true, Stats:false, UploadFIles:true});
+        break;
+      case 'Upload Files': setShow({Users:true, Systems:true, Tasks:true, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:false});
         break;
     }
   };
@@ -102,27 +45,16 @@ function App() {
 
   return (
     
-    <div className="App" hidden={show.Tasks}>
-      <SideMenu></SideMenu>
-      <div id="tasks" >
-        <Timeline groups={agents} items={tasks} defaultTimeStart={moment().add(-12, 'hour')} defaultTimeEnd={moment().add(12, 'hour')}/>
-        <PanelGroup>
-          <div className="panel">
-            <TaskData />
-          </div>
-          <div className="panel">
-            <FullWidthTabs />
-          </div>
-        </PanelGroup>
-        <div>
-          <Button variant="contained" color="primary">NEW TASK<ListItemIcon><LibraryAddIcon /></ListItemIcon></Button>
-        </div>
-      </div>
-      <div id="users"   hidden={show.Users}>USERS</div>
-      <div id="systems" hidden={show.Systems}>SYSTEMS</div>
-      <div id="tasks"   hidden={show.Tasks}>TASKS</div>
-      <div id="forms"   hidden={show.Forms}>FORMS</div>
-      <div id="agents"  hidden={show.Agents}>AGENTS</div>
+    <div className="App">
+      <SideMenu displayView={changeView}></SideMenu>
+      <div id="tasks" hidden={show.Tasks}><TasksPage /></div>
+      <div id="users"   hidden={show.Users}><UsersPage /></div>
+      <div id="systems" hidden={show.Systems}><SystemsPage /></div>
+      <div id="forms"   hidden={show.Forms}><FormsPage /></div>
+      <div id="agents" hidden={show.Agents}><AgentsPage /></div>
+      <div id="dashbords" hidden={show.Dashboard}><DashboardsPage /></div>
+      <div id="stats" hidden={show.Stats}><StatsPage /></div>
+      <div id="upload"  hidden={show.UploadFIles}><UploadFilesPage /></div>
     </div>
   );
 }
