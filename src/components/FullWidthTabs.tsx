@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { Button, ListItemIcon } from '@material-ui/core';
 import LabelImportantIcon from '@material-ui/icons/LabelImportant';
+import { Task } from '../interfaces/tasks.interface';
 
 
 interface TabPanelProps {
@@ -47,11 +48,11 @@ function a11yProps(index: any) {
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    width: 500,
+    // width: '100%',
   },
 }));
 
-export default function FullWidthTabs() {
+const FullWidthTabs: React.FC<{selectedTask: Task}> = ({selectedTask}) => {
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
@@ -88,10 +89,12 @@ export default function FullWidthTabs() {
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
           <p>Task Details</p>
-          <Button variant="contained" color="primary">ASSIGN TASK TO AGENT<ListItemIcon><LabelImportantIcon /></ListItemIcon></Button>
+          {JSON.stringify(selectedTask.id.length < 1 ? null: selectedTask, null, 2)}
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           <p>Agent Details</p>
+          {JSON.stringify(selectedTask.id.length < 1 ? null: selectedTask.assignment_info, null, 2)}
+
           <Button variant="contained" color="primary">C.R.U.D AGENT<ListItemIcon><LabelImportantIcon /></ListItemIcon></Button>
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
@@ -104,3 +107,5 @@ export default function FullWidthTabs() {
     </div>
   );
 }
+
+export default FullWidthTabs
