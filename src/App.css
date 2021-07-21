@@ -38,6 +38,6 @@
 }
 .panel{
   border: 1px solid gray;
-  width: 100%;
+  width: 40vw;
   min-height: 450px;
 }

@@ -25,80 +25,10 @@ import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import axios from "axios";
+import { Button, ListItemIcon } from "@material-ui/core";
+import LabelImportantIcon from "@material-ui/icons/LabelImportant";
 
-interface Data {
-  name: string;
-  type: string;
-  state: string;
-  description: string;
-  start_time: number;
-  duration: number;
-  assignment_info: string;
-  created_at: string;
-  updated_at: string;
-}
-
-interface Task {
-  name: string;
-  type: string;
-  state: {
-    availableStates: string[],
-    stateHistory: {
-      updatedAt: string,
-      createdAt: string,
-      previousState: string,
-      currentState: string
-    }[]
-  };
-  description: string;
-  start_time: number;
-  duration: number;
-  assignment_info: {
-    agent_id: string,
-    agent_name: string,
-  };
-  created_at: string;
-  updated_at: string;
-}
-
-
-function createData(
-  name: string,
-  type: string,
-  state: string,
-  description: string,
-  start_time: number,
-  duration: number,
-  assignment_info: string,
-  created_at: string,
-  updated_at: string
-): Data {
-  return {
-    name,
-    type,
-    state,
-    description,
-    start_time,
-    duration,
-    assignment_info,
-    created_at,
-    updated_at,
-  };
-}
-
-const rows = [
-  createData(
-    "test task",
-    "measurement",
-    'in_progress',
-    "test task description",
-    4.3,
-    0,
-    "itsik_agent",
-    "19/10/1997",
-    "19/10/1997"
-  ),
-];
+import {Data} from '../interfaces/tasks-data.interface';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -319,6 +249,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: "100%",
+      minWidth: '70vw'
     },
     paper: {
       width: "100%",
@@ -326,6 +257,11 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     table: {
       minWidth: 750,
+    },
+    assignDiv: {
+      display: "flex",
+      justifyContent: "flex-start",
+      padding: "0.5rem",
     },
     visuallyHidden: {
       border: 0,
@@ -341,7 +277,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function EnhancedTable() {
+interface TableProps {
+  dataRows: Data[];
+}
+
+const EnhancedTable: React.FC<TableProps> = ({dataRows}) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("type");
@@ -350,7 +290,7 @@ export default function EnhancedTable() {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const [dataRows, setDataRows] = React.useState<Data[]>([]);
+  // const [dataRows, setDataRows] = React.useState<Data[]>([]);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -363,19 +303,20 @@ export default function EnhancedTable() {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
-      setSelected(newSelecteds);
+      const newSelected = dataRows.map((n) => n.id);
+      debugger;
+      setSelected(newSelected);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected: string[] = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -405,47 +346,99 @@ export default function EnhancedTable() {
     setDense(event.target.checked);
   };
 
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
+  const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, dataRows.length - page * rowsPerPage);
 
-  const fetchData = () => {
-    const response = axios
-      .get("http://localhost:8000/gateway/v1/tasks/systems/3", {
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGU1YjI4NTQ3YTBmMDAwMmZiNWUzYzkiLCJpYXQiOjE2MjY2MDk0ODIsImV4cCI6MTYyOTIwMTQ4Mn0.gLHb_V-9eTBlhoMtb1OD6GuHv4oTcbLatufJ5WXMnU8",
+  // Manipulate Data
+  // Set variables
+  // const baseUrl = "http://localhost:8000/gateway/v1/";
+
+  // const [agent, setAgent] = React.useState<{
+  //   agent_name: string;
+  //   agent_id: string;
+  // }>({
+  //   agent_name: "",
+  //   agent_id: "",
+  // });
+
+  // const fetchTasksData = async () => {
+  //   const response = await axios.get(`${baseUrl}tasks/systems/3`, {
+  //     headers: {
+  //       Authorization:
+  //         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGU1YjI4NTQ3YTBmMDAwMmZiNWUzYzkiLCJpYXQiOjE2MjY2MDk0ODIsImV4cCI6MTYyOTIwMTQ4Mn0.gLHb_V-9eTBlhoMtb1OD6GuHv4oTcbLatufJ5WXMnU8",
+  //     },
+  //   });
+
+  //   const tasks: Task[] = response.data.data.tasks || [];
+  //   const modifiedTasks = tasks.map((task: Task) => {
+  //     return createData(
+  //       task.id,
+  //       task.name,
+  //       task.type,
+  //       task.state.stateHistory[0].currentState,
+  //       task.description,
+  //       task.start_time,
+  //       task.duration,
+  //       task.assignment_info?.agent_name || "task is not assigned",
+  //       task.created_at,
+  //       task.updated_at
+  //     );
+  //   });
+  //   setDataRows(modifiedTasks);
+  // };
+
+  const assignTask = async () => {
+    const agentName = window.prompt("Enter agent name <dev>:");
+    const agentId = window.prompt("Enter agent id <dev>:");
+
+    const config = {
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MGU1YjI4NTQ3YTBmMDAwMmZiNWUzYzkiLCJpYXQiOjE2MjY2MDk0ODIsImV4cCI6MTYyOTIwMTQ4Mn0.gLHb_V-9eTBlhoMtb1OD6GuHv4oTcbLatufJ5WXMnU8",
+      },
+    };
+
+    if (selected.length > 1) {
+      const response = await axios.post(
+        `http://localhost:8000/gateway/v1/tasks/assign`,
+        {
+          agent_id: agentId,
+          agent_name: agentName,
+          tasksIds: selected
         },
-      })
-      .then((response) => {
-        console.log(response.data.data.tasks, 'response')
-        const tasks: Task[] = response.data.data.tasks || [];
-        const modifiedTasks = tasks.map((task: Task) => {
-          return createData(
-            task.name,
-            task.type,
-            task.state.stateHistory[0].currentState,
-            task.description,
-            task.start_time,
-            task.duration,
-            task.assignment_info.agent_name || 'task is not assigned',
-            task.created_at,
-            task.updated_at
-          );
-        });
-
-        setDataRows(modifiedTasks);
-      });
+        config
+      );
+      alert(JSON.stringify(response, null, 2));
+    } else {
+      const response = await axios.put(
+        `http://localhost:8000/gateway/v1/tasks/${selected[0]}/assign`,
+        {
+          agent_id: agentId,
+          agent_name: agentName,
+        },
+        config
+      );
+      alert(JSON.stringify(response, null, 2));
+    }
   };
-
-  React.useEffect(() => {
-    fetchData();
-  }, []);
 
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
+        <div className={classes.assignDiv}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => assignTask()}
+          >
+            ASSIGN TASK TO AGENT
+            <ListItemIcon>
+              <LabelImportantIcon />
+            </ListItemIcon>
+          </Button>
+        </div>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer>
           <Table
@@ -461,23 +454,23 @@ export default function EnhancedTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={dataRows.length}
             />
             <TableBody>
               {stableSort(dataRows || [], getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.id}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -516,7 +509,7 @@ export default function EnhancedTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={dataRows.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -530,3 +523,5 @@ export default function EnhancedTable() {
     </div>
   );
 }
+
+export default EnhancedTable
