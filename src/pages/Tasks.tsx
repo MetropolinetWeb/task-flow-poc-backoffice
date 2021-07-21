@@ -10,12 +10,6 @@ import { Data } from "../interfaces/tasks-data.interface";
 import { Task } from "../interfaces/tasks.interface";
 import axios from "axios";
 
-const groups1 = [
-  { id: 1, title: "דוד דוד", rightTitle: "side title", stackItems: true },
-  { id: 2, title: "ג`ק הרר", rightTitle: "side title", stackItems: true },
-  { id: 3, title: "רמי לוי", rightTitle: "side title", stackItems: true },
-];
-
 const groups = [
   { id: "Guy", title: "Guy", rightTitle: "side title", stackItems: true },
   { id: "Itsik", title: "Itsik", rightTitle: "side title", stackItems: true },
@@ -120,14 +114,6 @@ const TaskPage: FC = () => {
 
   const [loading, setLoading] = useState(false);
   const baseUrl = "http://localhost:8000/gateway/v1/";
-
-  // const [agent, setAgent] = useState<{
-  //   agent_name: string;
-  //   agent_id: string;
-  // }>({
-  //   agent_name: "",
-  //   agent_id: "",
-  // });
 
   const fetchTasksData = async () => {
     setLoading(true);
@@ -274,3 +260,4 @@ export default TaskPage;
 //     },
 //   },
 // ];
+

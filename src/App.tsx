@@ -3,7 +3,7 @@ import { useState } from 'react';
 import './App.css';
 import 'react-calendar-timeline/lib/Timeline.css';
 
-import SideMenu from './components/sideMenu';
+import SideMenu from './components/SideMenu';
 import UsersPage from './pages/Users';
 import AgentsPage from './pages/Agents';
 import FormsPage from './pages/Forms';
