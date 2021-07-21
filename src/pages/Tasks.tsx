@@ -117,14 +117,6 @@ const TaskPage: FC = () => {
   const [loading, setLoading] = useState(false);
   const baseUrl = "http://localhost:8000/gateway/v1/";
 
-  // const [agent, setAgent] = useState<{
-  //   agent_name: string;
-  //   agent_id: string;
-  // }>({
-  //   agent_name: "",
-  //   agent_id: "",
-  // });
-
   const fetchTasksData = async () => {
     setLoading(true);
     const response = await axios.get(`${baseUrl}tasks/systems/3`, {
