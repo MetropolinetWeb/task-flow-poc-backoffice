@@ -23,6 +23,10 @@ import DashboardIcon from '@material-ui/icons/Dashboard';
 import PostAddIcon from '@material-ui/icons/PostAdd';
 import PollIcon from '@material-ui/icons/Poll';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 
 const drawerWidth = 240;
@@ -133,6 +137,13 @@ const SideMenu: React.FC<IView> = ({displayView}) => {
       displayView(text);
  };
  
+ const mainMenuItem = ['Users','Systems','Tasks', 'Forms', 'Agents'];
+ const secondMenuItem = ['Dashboards', 'Stats', 'Upload Files'];
+ const userMenuItem = ['Create', 'Add Permission','Kol zot Va Od'];
+ const systemMenuItem = ['Create', 'Add Permission','Kol zot Va Od'];
+ const taskMenuItem = ['Create', 'Add Permission','Kol zot Va Od'];
+ const formMenuItem = ['Create', 'Add Permission','Kol zot Va Od'];
+ const agentMenuItem = ['Create', 'Add Permission','Kol zot Va Od'];
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -150,24 +161,47 @@ const SideMenu: React.FC<IView> = ({displayView}) => {
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </div>
-        <Divider />
-        <List>
-          {['Users','Systems','Tasks', 'Forms', 'Agents'].map((text, index) => (
+        {/* <Divider /> */}
+        {/* <List>
+          {mainMenuItem.map((text, index) => (
             <ListItem button key={text}  onClick={() =>handleListItemClick(text)}>
               {renderIcon(index)}
               <ListItemText primary={text} />
             </ListItem>
           ))}
-        </List>
-        <Divider />
-        <List>
-          {['Dashboards', 'Stats', 'Upload Files'].map((text, index) => (
+        </List> */}
+        {/* <Divider /> */}
+        {/* <List>
+          {secondMenuItem.map((text, index) => (
             <ListItem button key={text}>
               {renderIcon(index + 5)}
               <ListItemText primary={text} onClick={() =>handleListItemClick(text)}/>
             </ListItem>
           ))}
-        </List>
+        </List> */}
+        {mainMenuItem.map((text, index) => (
+          <Accordion>
+          <AccordionSummary expandIcon={<ExpandMoreIcon />}>{ renderIcon(index)}{text}</AccordionSummary>
+          <AccordionDetails>
+            <List>
+              { text === 'Users'? userMenuItem.map((userText, index) => (<List><ListItem>{userText}</ListItem></List>)): null}
+              { text === 'Systems'? systemMenuItem.map((userText, index) => (<List><ListItem>{userText}</ListItem></List>)): null}
+              { text === 'Tasks'? taskMenuItem.map((userText, index) => (<List><ListItem>{userText}</ListItem></List>)): null}
+              { text === 'Forms'? formMenuItem.map((userText, index) => (<List><ListItem>{userText}</ListItem></List>)): null}
+              { text === 'Agents'? agentMenuItem.map((userText, index) => (<List><ListItem>{userText}</ListItem></List>)): null}
+            </List>
+          </AccordionDetails>
+        </Accordion>
+        ))}
+        
+        {<List>
+          {secondMenuItem.map((text, index) => (
+            <ListItem button key={text}>
+              {renderIcon(index + 5)}
+              <ListItemText primary={text} onClick={() =>handleListItemClick(text)}/>
+            </ListItem>
+          ))}
+        </List>}
       </Drawer>
       <main className={clsx(classes.content, {[classes.contentShift]: open,})}>
         <div className={classes.drawerHeader} />
