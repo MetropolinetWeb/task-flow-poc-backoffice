@@ -39,6 +39,7 @@ function App() {
       case 'Upload Files': setShow({Users:true, Systems:true, Tasks:true, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:false});
         break;
     }
+    
   };
 
 

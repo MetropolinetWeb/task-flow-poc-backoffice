@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -132,11 +132,13 @@ const SideMenu: React.FC<IView> = ({displayView}) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  const [title,setTitle] = useState('Tasks');
   const handleListItemClick = (text: string) => {
+      setTitle(text);
       displayView(text);
  };
- 
+
+
  const mainMenuItem = ['Users','Systems','Tasks', 'Forms', 'Agents'];
  const secondMenuItem = ['Dashboards', 'Stats', 'Upload Files'];
  const userMenuItem = ['Create', 'Add Permission','Kol zot Va Od'];
@@ -144,6 +146,7 @@ const SideMenu: React.FC<IView> = ({displayView}) => {
  const taskMenuItem = ['Create', 'Add Permission','Kol zot Va Od'];
  const formMenuItem = ['Create', 'Add Permission','Kol zot Va Od'];
  const agentMenuItem = ['Create', 'Add Permission','Kol zot Va Od'];
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -152,7 +155,7 @@ const SideMenu: React.FC<IView> = ({displayView}) => {
           <IconButton color="inherit" aria-label="open drawer" onClick={handleDrawerOpen} edge="start" className={clsx(classes.menuButton, open && classes.hide)}>
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>Task Monitor</Typography>
+          <Typography variant="h6" noWrap>{title}</Typography>
         </Toolbar>
       </AppBar>
       <Drawer className={classes.drawer} variant="persistent" anchor="left" open={open} classes={{paper: classes.drawerPaper,}}>
@@ -181,14 +184,14 @@ const SideMenu: React.FC<IView> = ({displayView}) => {
         </List> */}
         {mainMenuItem.map((text, index) => (
           <Accordion>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>{ renderIcon(index)}{text}</AccordionSummary>
+          <AccordionSummary onClick={() =>handleListItemClick(text)} expandIcon={<ExpandMoreIcon />}>{ renderIcon(index)}{text}</AccordionSummary>
           <AccordionDetails>
             <List>
-              { text === 'Users'? userMenuItem.map((userText, index) => (<List><ListItem>{userText}</ListItem></List>)): null}
-              { text === 'Systems'? systemMenuItem.map((userText, index) => (<List><ListItem>{userText}</ListItem></List>)): null}
-              { text === 'Tasks'? taskMenuItem.map((userText, index) => (<List><ListItem>{userText}</ListItem></List>)): null}
-              { text === 'Forms'? formMenuItem.map((userText, index) => (<List><ListItem>{userText}</ListItem></List>)): null}
-              { text === 'Agents'? agentMenuItem.map((userText, index) => (<List><ListItem>{userText}</ListItem></List>)): null}
+              { text === 'Users'? userMenuItem.map((userText) => (<List><ListItem button key={text}>{userText}</ListItem><Divider/></List>)): null}
+              { text === 'Systems'? systemMenuItem.map((userText) => (<List><ListItem button key={text}>{userText}</ListItem><Divider/></List>)): null}
+              { text === 'Tasks'? taskMenuItem.map((userText) => (<List><ListItem button key={text}>{userText}</ListItem><Divider/></List>)): null}
+              { text === 'Forms'? formMenuItem.map((userText) => (<List><ListItem button key={text}>{userText}</ListItem><Divider/></List>)): null}
+              { text === 'Agents'? agentMenuItem.map((userText) => (<List><ListItem button key={text}>{userText}</ListItem><Divider/></List>)): null}
             </List>
           </AccordionDetails>
         </Accordion>

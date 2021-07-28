@@ -24,6 +24,7 @@ import PostAddIcon from '@material-ui/icons/PostAdd';
 import NoteIcon from '@material-ui/icons/Note';
 import PollIcon from '@material-ui/icons/Poll';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import { useState } from 'react';
 
 
 const drawerWidth = 240;
@@ -123,7 +124,9 @@ export default function PersistentDrawerLeft() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const [title,setTitle] = useState('Tasks');
  const handleListItemClick = (text: string, ind: number) => {
+  setTitle(text);
   alert(text)
     switch(ind){
       case 0:
@@ -146,6 +149,8 @@ export default function PersistentDrawerLeft() {
         return -1;
     }
  };
+
+
  
   return (
     <div className={classes.root}>
@@ -155,10 +160,10 @@ export default function PersistentDrawerLeft() {
           <IconButton color="inherit" aria-label="open drawer" onClick={handleDrawerOpen} edge="start" className={clsx(classes.menuButton, open && classes.hide)}>
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>Task Monitor</Typography>
+          <Typography variant="h6" noWrap>{title}</Typography>
         </Toolbar>
       </AppBar>
-      <Drawer className={classes.drawer} variant="persistent" anchor="left" open={open} classes={{paper: classes.drawerPaper,}}>
+      <Drawer className={classes.drawer} variant="persistent" anchor="left" open={open} classes={{paper: classes.drawerPaper}}>
         <div className={classes.drawerHeader}>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
