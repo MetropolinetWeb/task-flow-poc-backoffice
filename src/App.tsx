@@ -16,8 +16,6 @@ import DashboardsPage from './pages/Dashboards';
 
 
 
-
-
 function App() {
   const [show, setShow] = useState({Users:true, Systems:true, Tasks:false, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:true});
 
