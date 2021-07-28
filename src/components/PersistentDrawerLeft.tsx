@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -21,12 +21,10 @@ import DomainIcon from '@material-ui/icons/Domain';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import PostAddIcon from '@material-ui/icons/PostAdd';
+import NoteIcon from '@material-ui/icons/Note';
 import PollIcon from '@material-ui/icons/Poll';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { useState } from 'react';
 
 
 const drawerWidth = 240;
@@ -90,12 +88,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-interface IView {
-  displayView: (viewName: string) => void;
-}
-
-//(displayView: (divName: string) => {}) {
-const SideMenu: React.FC<IView> = ({displayView}) => {
+export default function PersistentDrawerLeft() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -103,7 +96,7 @@ const SideMenu: React.FC<IView> = ({displayView}) => {
 
   const renderIcon = (ind: number) => {
     console.log(ind);
-    switch (ind) {
+    switch(ind) {
       case 0:
         return <ListItemIcon><EmojiPeopleIcon /></ListItemIcon>;
       case 1:
@@ -119,12 +112,11 @@ const SideMenu: React.FC<IView> = ({displayView}) => {
       case 6:
         return <ListItemIcon><PollIcon /></ListItemIcon>;
       case 7:
-        return <ListItemIcon><CloudUploadIcon /></ListItemIcon>;
+       return <ListItemIcon><CloudUploadIcon /></ListItemIcon>;
       default:
         return -1;
     }
-  };
-
+  }
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -133,20 +125,33 @@ const SideMenu: React.FC<IView> = ({displayView}) => {
     setOpen(false);
   };
   const [title,setTitle] = useState('Tasks');
-  const handleListItemClick = (text: string) => {
-      setTitle(text);
-      displayView(text);
+ const handleListItemClick = (text: string, ind: number) => {
+  setTitle(text);
+  alert(text)
+    switch(ind){
+      case 0:
+        return alert('show' + text);
+      case 1:
+        return alert('show' + text);
+      case 2:
+        return alert('show' + text);
+      case 3:
+        return alert('show' + text);
+      case 4:
+        return alert('show' + text);
+      case 5:
+        return alert('show' + text);
+      case 6:
+        return alert('show' + text);
+      case 7:
+       return alert('show' + text);
+      default:
+        return -1;
+    }
  };
 
 
- const mainMenuItem =   ['Users','Systems','Tasks', 'Forms', 'Agents'];
- const secondMenuItem = ['Dashboards', 'Stats', 'Upload Files'];
- const userMenuItem =   ['Main'];
- const systemMenuItem = ['Main'];
- const taskMenuItem =   ['Main', 'Task Monitor'];
- const formMenuItem =   ['Main','Form Builder'];
- const agentMenuItem =  ['Main'];
-
+ 
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -158,53 +163,30 @@ const SideMenu: React.FC<IView> = ({displayView}) => {
           <Typography variant="h6" noWrap>{title}</Typography>
         </Toolbar>
       </AppBar>
-      <Drawer className={classes.drawer} variant="persistent" anchor="left" open={open} classes={{paper: classes.drawerPaper,}}>
+      <Drawer className={classes.drawer} variant="persistent" anchor="left" open={open} classes={{paper: classes.drawerPaper}}>
         <div className={classes.drawerHeader}>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
         </div>
-        {/* <Divider /> */}
-        {/* <List>
-          {mainMenuItem.map((text, index) => (
-            <ListItem button key={text}  onClick={() =>handleListItemClick(text)}>
+        <Divider />
+        <List>
+          {['Users','Systems','Tasks', 'Forms', 'Agents'].map((text, index) => (
+            <ListItem button key={text}  onClick={() =>handleListItemClick(text,index)}>
               {renderIcon(index)}
               <ListItemText primary={text} />
             </ListItem>
           ))}
-        </List> */}
-        {/* <Divider /> */}
-        {/* <List>
-          {secondMenuItem.map((text, index) => (
+        </List>
+        <Divider />
+        <List>
+          {['Dashbords', 'Stats', 'Upload Files'].map((text, index) => (
             <ListItem button key={text}>
               {renderIcon(index + 5)}
-              <ListItemText primary={text} onClick={() =>handleListItemClick(text)}/>
+              <ListItemText primary={text} onClick={() =>handleListItemClick(text,index)}/>
             </ListItem>
           ))}
-        </List> */}
-        {mainMenuItem.map((text, index) => (
-          <Accordion>
-          <AccordionSummary onClick={() =>handleListItemClick(text)} expandIcon={<ExpandMoreIcon />}>{ renderIcon(index)}{text}</AccordionSummary>
-          <AccordionDetails>
-            <List>
-              { text === 'Users'? userMenuItem.map((userText) => (<List><ListItem button key={text}>{userText}</ListItem><Divider/></List>)): null}
-              { text === 'Systems'? systemMenuItem.map((userText) => (<List><ListItem button key={text}>{userText}</ListItem><Divider/></List>)): null}
-              { text === 'Tasks'? taskMenuItem.map((userText) => (<List><ListItem button key={text}>{userText}</ListItem><Divider/></List>)): null}
-              { text === 'Forms'? formMenuItem.map((userText) => (<List><ListItem button key={text}>{userText}</ListItem><Divider/></List>)): null}
-              { text === 'Agents'? agentMenuItem.map((userText) => (<List><ListItem button key={text}>{userText}</ListItem><Divider/></List>)): null}
-            </List>
-          </AccordionDetails>
-        </Accordion>
-        ))}
-        
-        {<List>
-          {secondMenuItem.map((text, index) => (
-            <ListItem button key={text}>
-              {renderIcon(index + 5)}
-              <ListItemText primary={text} onClick={() =>handleListItemClick(text)}/>
-            </ListItem>
-          ))}
-        </List>}
+        </List>
       </Drawer>
       <main className={clsx(classes.content, {[classes.contentShift]: open,})}>
         <div className={classes.drawerHeader} />
@@ -212,4 +194,3 @@ const SideMenu: React.FC<IView> = ({displayView}) => {
     </div>
   );
 }
-export default SideMenu;

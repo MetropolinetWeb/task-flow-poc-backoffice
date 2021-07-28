@@ -94,8 +94,6 @@ const FullWidthTabs: React.FC<{selectedTask: Task}> = ({selectedTask}) => {
         <TabPanel value={value} index={1} dir={theme.direction}>
           <p>Agent Details</p>
           {JSON.stringify(selectedTask.id.length < 1 ? null: selectedTask.assignment_info, null, 2)}
-
-          <Button variant="contained" color="primary">C.R.U.D AGENT<ListItemIcon><LabelImportantIcon /></ListItemIcon></Button>
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
         <p>More Information</p>

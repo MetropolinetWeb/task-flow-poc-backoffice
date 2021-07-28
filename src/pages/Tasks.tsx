@@ -5,6 +5,7 @@ import PanelGroup from "react-panelgroup";
 import FullWidthTabs from "../components/FullWidthTabs";
 import { Button, ListItemIcon } from "@material-ui/core";
 import LibraryAddIcon from "@material-ui/icons/LibraryAdd";
+import AlarmAdd from "@material-ui/icons/AlarmAdd";
 import TaskData from "../components/TaskData";
 import moment from "moment";
 import { Data } from "../interfaces/tasks-data.interface";
@@ -167,23 +168,13 @@ const TaskPage: FC = () => {
             }}
           />
 
-          <PanelGroup
-            spacing={5}
-            panelWidths={[
-              { size: 800, minSize: 650},
-              { size: 440, minSize: 350},
-            ]}
-          >
+          <PanelGroup spacing={5} panelWidths={[{ size: 800, minSize: 650},{ size: 440, minSize: 350}]}>
             <TaskData dataRows={dataRows} />
             <FullWidthTabs selectedTask={selectedTask} />
           </PanelGroup>
 
           <div>
-            <Button variant="contained" color="primary">
-              NEW TASK
-              <ListItemIcon>
-                <LibraryAddIcon />
-              </ListItemIcon>
+            <Button variant="contained" color="primary">NEW TASK<ListItemIcon><LibraryAddIcon /></ListItemIcon>
             </Button>
           </div>
         </div>
