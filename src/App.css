@@ -41,3 +41,9 @@
   width: 40vw;
   min-height: 450px;
 }
+.floatR{
+  float:right;
+}
+.floatL{
+  float:left;
+}
