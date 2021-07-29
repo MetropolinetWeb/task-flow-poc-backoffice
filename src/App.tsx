@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useState } from 'react';
 import './App.css';
@@ -12,8 +13,6 @@ import TasksPage from './pages/Tasks';
 import UploadFilesPage from './pages/UploadFiles';
 import SystemsPage from './pages/Systems';
 import DashboardsPage from './pages/Dashboards';
-
-
 
 
 
@@ -39,7 +38,6 @@ function App() {
       case 'Upload Files': setShow({Users:true, Systems:true, Tasks:true, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:false});
         break;
     }
-    
   };
 
 
@@ -61,3 +59,4 @@ function App() {
 }
 
 export default App;
+
