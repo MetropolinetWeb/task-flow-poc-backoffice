@@ -86,7 +86,8 @@ const createTimeline = (tasks: Task[]) => {
 const TaskPage: FC = () => {
   const [dataRows, setDataRows] = useState<Data[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [selectedTask, setSelectedTask] = useState<Task>({
+  const [selectedTask, setSelectedTask] = useState<Task>(
+    {
     assignment_info: {
       agent_id: "",
       agent_name: "",
@@ -114,15 +115,13 @@ const TaskPage: FC = () => {
         },
       ],
     },
-  });
-  const [showActions,setShowActions] = useState(false);
+    }
+  );
+  const [showActions,setShowActions] = useState(true);
   const [loading, setLoading] = useState(false);
   const baseUrl = "http://localhost:8000/gateway/v1/";
 
-
-
   const callSetShowActions = () => {
-    debugger
     setShowActions(!showActions);
   };
 
@@ -177,13 +176,13 @@ const TaskPage: FC = () => {
                     
           <div className="floatL">
             <Button color="primary"><ListItemIcon><LibraryAddIcon />NEW</ListItemIcon></Button>
-            <Box display={showActions} className="floatR">
-              <Button color="primary"><ListItemIcon><DeleteIcon />DELETE</ListItemIcon></Button>
-              <Button color="primary"><ListItemIcon><UpdateIcon />EDIT</ListItemIcon></Button>
-              <Button color="primary"><ListItemIcon><AssignmentIndIcon />ASSIGN</ListItemIcon></Button>
-            </Box>
+              <Box hidden={showActions} className="floatR">
+                <Button color="primary"><ListItemIcon><DeleteIcon />DELETE</ListItemIcon></Button>
+                <Button color="primary"><ListItemIcon><UpdateIcon />EDIT</ListItemIcon></Button>
+                <Button color="primary"><ListItemIcon><AssignmentIndIcon />ASSIGN</ListItemIcon></Button>
+              </Box>
           </div>
-          <PanelGroup spacing={5} panelWidths={[{ size: 800, minSize: 650},{ size: 440, minSize: 350}]}>
+          <PanelGroup spacing={5} panelWidths={[{ size: 1320, minSize: 500},{ size: 550, minSize: 550}]}>
             <TaskData dataRows={dataRows} setButtons={callSetShowActions}/>
             <FullWidthTabs selectedTask={selectedTask} />
           </PanelGroup>
