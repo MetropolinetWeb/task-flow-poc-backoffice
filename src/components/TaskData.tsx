@@ -28,6 +28,8 @@ import axios from "axios";
 import { Button, ListItemIcon } from "@material-ui/core";
 import LabelImportantIcon from "@material-ui/icons/LabelImportant";
 import {Data} from '../interfaces/tasks-data.interface';
+import FullScreenDialog from '../components/FullScreenDialog';
+
 
 interface HeadCell {
   disablePadding: boolean;
@@ -349,10 +351,9 @@ const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons}) => {
 
 
   const assignTask = async () => {
-    //Open full modal screen
-    const agentName = window.prompt("Enter agent name <dev>:");
-    const agentId = window.prompt("Enter agent id <dev>:");
-
+    handleClickOpen();
+    const agentName = '';//window.prompt("Enter agent name <dev>:");
+    const agentId = '';//window.prompt("Enter agent id <dev>:");
     const config = {
       headers: {
         Authorization:
@@ -382,6 +383,15 @@ const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons}) => {
     }
   };
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -467,12 +477,13 @@ const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons}) => {
         label="Dense padding"
       />
        <div className={classes.assignDiv}>
-          <Button variant="contained" color="primary" onClick={() => assignTask()}>
+          <Button variant="outlined" color="primary" onClick={() => assignTask()}>
+          <ListItemIcon>
             ASSIGN TASK
-            <ListItemIcon>
               <LabelImportantIcon />
-            </ListItemIcon>
-          </Button>
+          </ListItemIcon>
+        </Button>
+        <FullScreenDialog handleClickOpen={handleClickOpen} handleClose={handleClose} open={open}/>
         </div>
     </div>
   );

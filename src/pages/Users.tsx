@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
 import { User } from '../interfaces/user.interface';
 import TaskData from '../components/TaskData';
+import UserData from '../components/UserData';
 
 
 const rows = [
@@ -47,8 +48,10 @@ const UsersPage: React.FC = () => {
   ]
   return (<div className="container">
     <h1>USERS</h1>
-    <Box m={+5}><SearchBar></SearchBar></Box>
-    {/* <TaskData userRows={dataRows} /> */}
+    <Box m={+5}>
+      <SearchBar />
+    </Box>
+    {/*<UserData userRows={dataRows} />*/}
   </div>)
 }
 export default UsersPage;
