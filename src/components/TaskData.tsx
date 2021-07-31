@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
 import {
   createStyles,
@@ -25,8 +25,6 @@ import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import axios from "axios";
-import { Button, ListItemIcon } from "@material-ui/core";
-import LabelImportantIcon from "@material-ui/icons/LabelImportant";
 import {Data} from '../interfaces/tasks-data.interface';
 import FullScreenDialog from '../components/FullScreenDialog';
 
@@ -279,9 +277,12 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 interface TableProps {
   dataRows: Data[];
   setButtons: () => void;
+  handleClickOpen: () => void;
+  handleClose: () => void;
+  open: boolean;
 }
 
-const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons}) => {
+const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons,handleClickOpen,handleClose,open}) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("type");
@@ -349,11 +350,11 @@ const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons}) => {
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, dataRows.length - page * rowsPerPage);
 
+  const [agentName, setAgentName] = useState('');
+  const [agentId, setAgentId] = useState('');
 
   const assignTask = async () => {
-    handleClickOpen();
-    const agentName = '';//window.prompt("Enter agent name <dev>:");
-    const agentId = '';//window.prompt("Enter agent id <dev>:");
+    debugger
     const config = {
       headers: {
         Authorization:
@@ -383,15 +384,6 @@ const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons}) => {
     }
   };
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
@@ -477,13 +469,13 @@ const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons}) => {
         label="Dense padding"
       />
        <div className={classes.assignDiv}>
-          <Button variant="outlined" color="primary" onClick={() => assignTask()}>
+          {/*<Button variant="outlined" color="primary" onClick={() => assignTask()}>
           <ListItemIcon>
             ASSIGN TASK
               <LabelImportantIcon />
           </ListItemIcon>
-        </Button>
-        <FullScreenDialog handleClickOpen={handleClickOpen} handleClose={handleClose} open={open}/>
+        </Button>*/}
+        <FullScreenDialog handleClickOpen={handleClickOpen} handleClose={handleClose} open={open} assignTask={assignTask} setAgentName={ setAgentName } setAgentId={ setAgentId } />
         </div>
     </div>
   );

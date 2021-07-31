@@ -29,9 +29,15 @@ const Transition = React.forwardRef(function Transition(
 });
 
 
-
-export default function FullScreenDialog(props:{ handleClickOpen:() => void, handleClose: () => void, open: boolean}) {
+export default function FullScreenDialog(props: { handleClickOpen: () => void, handleClose: () => void, open: boolean, assignTask: () => void, setAgentName: (name: string) => void, setAgentId: (id: string) => void }) {
   const classes = useStyles();
+  const [selected, setSelected] = React.useState('Choose Agent');
+  const handleAgentSelectChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    debugger
+    setSelected(event.target.value as string);
+    props.setAgentName(event.target.value as string);
+    props.setAgentId("11111");
+  };
   
 
   return (
@@ -48,15 +54,15 @@ export default function FullScreenDialog(props:{ handleClickOpen:() => void, han
           </Toolbar>
         </AppBar>
         <hr/>
-        <Select autoFocus>
-          <MenuItem value="agentId">agent 1</MenuItem>
-          <MenuItem value="agentId">agent 2</MenuItem>
-          <MenuItem value="agentId">agent 3</MenuItem>
-          <MenuItem value="agentId">agent 4</MenuItem>
-          <MenuItem value="agentId">agent 5 </MenuItem>
+        <Select autoFocus variant="outlined" value={selected} onChange={handleAgentSelectChange}>
+          <MenuItem value="Itsik">Itsik</MenuItem>
+          <MenuItem value="Guy">Guy</MenuItem>
+          <MenuItem value="3">agent 3</MenuItem>
+          <MenuItem value="4">agent 4</MenuItem>
+          <MenuItem value="5">agent 5 </MenuItem>
           </Select>
         <hr/>
-        <Button variant="outlined" color="primary" onClick={props.handleClose}>Assign</Button>
+        <Button variant="outlined" color="primary" onClick={props.assignTask}>Assign</Button>
       </Dialog>
     </div>
   );

@@ -1,11 +1,9 @@
 import { Box } from '@material-ui/core';
-import { DataGrid } from '@material-ui/data-grid';
 import SearchBar from '../components/SearchBar';
 import { v4 as uuidv4 } from 'uuid';
 import { useState } from 'react';
 import { User } from '../interfaces/user.interface';
-import TaskData from '../components/TaskData';
-import UserData from '../components/UserData';
+
 
 
 const rows = [

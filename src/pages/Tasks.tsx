@@ -13,6 +13,7 @@ import moment from "moment";
 import { Data } from "../interfaces/tasks-data.interface";
 import { Task } from "../interfaces/tasks.interface";
 import axios from "axios";
+import React from "react";
 
 const groups = [
   { id: "Guy", title: "Guy", rightTitle: "side title", stackItems: true },
@@ -159,6 +160,15 @@ const TaskPage: FC = () => {
     setLoading(false);
   }, []);
 
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <div>
       {loading ? (
@@ -179,11 +189,11 @@ const TaskPage: FC = () => {
               <Box hidden={showActions} className="floatR">
                 <Button color="primary"><ListItemIcon><DeleteIcon />DELETE</ListItemIcon></Button>
                 <Button color="primary"><ListItemIcon><UpdateIcon />EDIT</ListItemIcon></Button>
-                <Button color="primary"><ListItemIcon><AssignmentIndIcon />ASSIGN</ListItemIcon></Button>
+                <Button color="primary" onClick={handleClickOpen}><ListItemIcon><AssignmentIndIcon />ASSIGN</ListItemIcon></Button>
               </Box>
           </div>
           <PanelGroup spacing={5} panelWidths={[{ size: 1320, minSize: 500},{ size: 550, minSize: 550}]}>
-            <TaskData dataRows={dataRows} setButtons={callSetShowActions}/>
+              <TaskData dataRows={dataRows} setButtons={callSetShowActions} handleClose={handleClose} handleClickOpen={handleClickOpen} open={open}/>
             <FullWidthTabs selectedTask={selectedTask} />
           </PanelGroup>
 
