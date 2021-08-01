@@ -312,7 +312,7 @@ const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons,handleClickOpe
   };
 
   const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
-    debugger
+    // debugger
     const selectedIndex = selected.indexOf(id);
     let newSelected: string[] = [];
     if (selectedIndex === -1) {
@@ -354,11 +354,11 @@ const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons,handleClickOpe
   const [agentId, setAgentId] = useState('');
 
   const assignTask = async () => {
-    debugger
+    // debugger
     const config = {
       headers: {
         Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTAyOTcwMWZiYmMxNTAwMmZiM2Y3ZTkiLCJpYXQiOjE2Mjc1NjM4MjMsImV4cCI6MTYzMDE1NTgyM30.SiJw_JXtwRHAUfcippuJ9QJgMowQ2bPW9DzjuHc7xy4",
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTAyODJlZDM2ZWU3NzAwMzFmODQzYmIiLCJpYXQiOjE2Mjc4MDY4NDQsImV4cCI6MTYzMDM5ODg0NH0.JVESKVFnV1GySLzeNXQah19ZRuMwE9FNtyKwCgcOCkk",
       },
     };
 
@@ -383,6 +383,27 @@ const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons,handleClickOpe
       alert(JSON.stringify(response, null, 2));
     }
   };
+
+  const agentsList = [{
+    name: 'Guy',
+    _id: 'agentId'
+  },
+  {
+    name: 'Itsik',
+    _id: 'agentId'
+  },
+  {
+    name: 'Yaniv',
+    _id: 'agentId'
+  },
+  {
+    name: 'Ami',
+    _id: 'agentId'
+  },
+  {
+    name: 'Dan',
+    _id: 'agentId'
+  }]
 
   return (
     <div className={classes.root}>
@@ -475,7 +496,7 @@ const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons,handleClickOpe
               <LabelImportantIcon />
           </ListItemIcon>
         </Button>*/}
-        <FullScreenDialog handleClickOpen={handleClickOpen} handleClose={handleClose} open={open} assignTask={assignTask} setAgentName={ setAgentName } setAgentId={ setAgentId } />
+        <FullScreenDialog items={agentsList} handleClickOpen={handleClickOpen} handleClose={handleClose} open={open} assignTask={assignTask} setAgentName={ setAgentName } setAgentId={ setAgentId } />
         </div>
     </div>
   );
