@@ -499,7 +499,7 @@ const EnhancedTable: React.FC<TableProps> = ({
     const config = {
       headers: {
         Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTAyODJlZDM2ZWU3NzAwMzFmODQzYmIiLCJpYXQiOjE2Mjc4MDY4NDQsImV4cCI6MTYzMDM5ODg0NH0.JVESKVFnV1GySLzeNXQah19ZRuMwE9FNtyKwCgcOCkk",
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTA2YTBhOWY2YTA3NTAwMzBjYzY4OTIiLCJpYXQiOjE2Mjc4MjQzNDYsImV4cCI6MTYzMDQxNjM0Nn0.IXVQnjVkH42L-fUBpU4qD5_YabUEpdSaxMjq8VJnUQA",
       },
     };
 
