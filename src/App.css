@@ -47,3 +47,7 @@
 .floatL{
   float:left;
 }
+.react-calendar-timeline .rct-dateHeader-primary .color-change{
+  background-color:antiquewhite;
+  color:black;
+}
