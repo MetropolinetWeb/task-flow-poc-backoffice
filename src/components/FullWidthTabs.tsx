@@ -79,7 +79,6 @@ const FullWidthTabs: React.FC<{selectedTask: Task}> = ({selectedTask}) => {
           <Tab label="Task Details" {...a11yProps(0)} />
           <Tab label="Agent Details" {...a11yProps(1)} />
           <Tab label="Info" {...a11yProps(2)} />
-          <Tab label="Actions" {...a11yProps(3)} />
         </Tabs>
       </AppBar>
       <SwipeableViews
@@ -97,9 +96,6 @@ const FullWidthTabs: React.FC<{selectedTask: Task}> = ({selectedTask}) => {
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
         <p>More Information</p>
-        </TabPanel>
-        <TabPanel value={value} index={3} dir={theme.direction}>
-        <p>Actions</p>
         </TabPanel>
       </SwipeableViews>
     </div>

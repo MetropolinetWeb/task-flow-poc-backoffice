@@ -358,7 +358,7 @@ const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons,handleClickOpe
     const config = {
       headers: {
         Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTA2YTBhOWY2YTA3NTAwMzBjYzY4OTIiLCJpYXQiOjE2Mjc4MjQzNDYsImV4cCI6MTYzMDQxNjM0Nn0.IXVQnjVkH42L-fUBpU4qD5_YabUEpdSaxMjq8VJnUQA",
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTA2YTBhOWY2YTA3NTAwMzBjYzY4OTIiLCJpYXQiOjE2Mjc5Mjg3NDQsImV4cCI6MTYzMDUyMDc0NH0.8Uvy8tgflSxbN7J8hkw3BilDIrJpB-dvgofRYsNcRlc",
       },
     };
 
