@@ -45,5 +45,6 @@
   float:right;
 }
 .floatL{
+  padding: 1rem;
   float:left;
 }

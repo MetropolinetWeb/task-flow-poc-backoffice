@@ -25,9 +25,9 @@ import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import axios from "axios";
-import {Data} from '../interfaces/tasks-data.interface';
-import FullScreenDialog from '../components/FullScreenDialog';
-
+import { Data } from "../interfaces/tasks-data.interface";
+import FullScreenDialog from "../components/FullScreenDialog";
+import { MenuItem, Select, TextField } from "@material-ui/core";
 
 interface HeadCell {
   disablePadding: boolean;
@@ -51,6 +51,13 @@ interface EnhancedTableProps {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  handleClickOpen: () => void;
+  handleClose: () => void;
+  open: boolean;
+  assignTask: () => void;
+  setAgentName: (name: string) => void;
+  setAgentId: (id: string) => void;
+  items: { name: string; _id: string }[];
 }
 
 type Order = "asc" | "desc";
@@ -117,44 +124,171 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   const classes = useToolbarStyles();
   const { numSelected } = props;
 
+  const [open, setOpen] = React.useState(false);
+
+  const [filters, setFilters] = React.useState({
+    authority: "",
+    state: "",
+    id: "",
+    agentName: "",
+    createdBy: "",
+    name: "",
+    type: "",
+    description: "",
+  });
+
+  const [searchFields, setSearchFields] = React.useState<string[]>([]);
+  
+  const handleFilterChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const {name, value} = event.target;
+    setFilters({ ...filters, [name]: value});
+  }
+
   return (
-    <Toolbar
-      className={clsx(classes.root, {
-        [classes.highlight]: numSelected > 0,
-      })}
-    >
-      {numSelected > 0 ? (
-        <Typography
-          className={classes.title}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Typography
-          className={classes.title}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-        </Typography>
-      )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton aria-label="delete">
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="Filter list">
-          <IconButton aria-label="filter list">
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      )}
-    </Toolbar>
+    <>
+      <Toolbar
+        className={clsx(classes.root, {
+          [classes.highlight]: numSelected > 0,
+        })}
+      >
+        {numSelected > 0 ? (
+          <Typography
+            className={classes.title}
+            color="inherit"
+            variant="subtitle1"
+            component="div"
+          >
+            {numSelected} selected
+          </Typography>
+        ) : (
+          <Typography
+            className={classes.title}
+            variant="h6"
+            id="tableTitle"
+            component="div"
+          ></Typography>
+        )}
+        {numSelected > 0 ? (
+          <Tooltip title="Delete">
+            <IconButton aria-label="delete">
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        ) : (
+          <Tooltip title="Filter list">
+            <IconButton aria-label="filter list">
+              <FilterListIcon
+                onClick={() => {
+                  setOpen(!open);
+                }}
+              />
+            </IconButton>
+          </Tooltip>
+        )}
+      </Toolbar>
+      <FullScreenDialog
+        items={[]}
+        handleClickOpen={() => setOpen(true)}
+        handleClose={() => setOpen(false)}
+        open={open}
+        title="Filter tasks"
+        Component={<div>
+          <div
+            style={{
+              padding: '1rem',
+              margin: '1rem',
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <TextField
+              id="standard-search"
+              label="Search by task name"
+              type="search"
+              name="name"
+              value={filters.name}
+              onChange={(event) => {
+                handleFilterChange(event);
+              }}
+            />
+
+            <TextField
+              id="standard-search"
+              label="Search by task type"
+              type="search"
+              name="type"
+              value={filters.type}
+              onChange={(event) => {
+                handleFilterChange(event);
+              }}
+            />
+            <TextField
+              id="standard-search"
+              label="Search by description"
+              type="search"
+              name="description"
+              value={filters.description}
+              onChange={(event) => {
+                handleFilterChange(event);
+              }}
+            />
+
+            <TextField
+              id="standard-search"
+              label="Search by authority"
+              type="search"
+              name="authority"
+              value={filters.authority}
+              onChange={(event) => {
+                setFilters({
+                  ...filters,
+                  authority: event.target.value,
+                });
+              }}
+            />
+
+            <TextField
+              id="standard-search"
+              label="Search by task state"
+              type="search"
+              value={filters.state}
+              name="state"
+              onChange={(event) => {
+                handleFilterChange(event);
+              }}
+            />
+
+            <TextField
+              id="standard-search"
+              label="Search by task creator"
+              type="search"
+              name="createdBy"
+              value={filters.createdBy}
+              onChange={(event) => {
+                handleFilterChange(event);
+              }}
+            />
+
+            <TextField
+              id="standard-search"
+              label="Search by Agent name"
+              type="search"
+              value={filters.agentName}
+              name="agentName"
+              onChange={(event) => {
+                handleFilterChange(event);
+              }}
+            />
+          </div>
+        </div>}
+        buttonLabel="Filter tasks"
+        assignTask={props.assignTask}
+        setAgentName={props.setAgentName}
+        setAgentId={props.setAgentId}
+      />
+    </>
   );
 };
 
@@ -162,7 +296,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       width: "100%",
-      minWidth: '70vw'
+      minWidth: "70vw",
     },
     paper: {
       width: "100%",
@@ -282,7 +416,13 @@ interface TableProps {
   open: boolean;
 }
 
-const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons,handleClickOpen,handleClose,open}) => {
+const EnhancedTable: React.FC<TableProps> = ({
+  dataRows,
+  setButtons,
+  handleClickOpen,
+  handleClose,
+  open,
+}) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
   const [orderBy, setOrderBy] = React.useState<keyof Data>("type");
@@ -348,10 +488,11 @@ const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons,handleClickOpe
 
   const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, dataRows.length - page * rowsPerPage);
+  const emptyRows =
+    rowsPerPage - Math.min(rowsPerPage, dataRows.length - page * rowsPerPage);
 
-  const [agentName, setAgentName] = useState('');
-  const [agentId, setAgentId] = useState('');
+  const [agentName, setAgentName] = useState("");
+  const [agentId, setAgentId] = useState("");
 
   const assignTask = async () => {
     // debugger
@@ -363,17 +504,19 @@ const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons,handleClickOpe
     };
 
     if (selected.length > 1) {
-      const response = await axios.post(`http://localhost:8000/gateway/v1/tasks/assign`,
-      {
-        agent_id: agentId,
-        agent_name: agentName,
-        tasksIds: selected
-      },
-      config
+      const response = await axios.post(
+        `http://localhost:8000/gateway/v1/tasks/assign`,
+        {
+          agent_id: agentId,
+          agent_name: agentName,
+          tasksIds: selected,
+        },
+        config
       );
       alert(JSON.stringify(response, null, 2));
     } else {
-      const response = await axios.put(`http://localhost:8000/gateway/v1/tasks/${selected[0]}/assign`,
+      const response = await axios.put(
+        `http://localhost:8000/gateway/v1/tasks/${selected[0]}/assign`,
         {
           agent_id: agentId,
           agent_name: agentName,
@@ -384,31 +527,45 @@ const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons,handleClickOpe
     }
   };
 
-  const agentsList = [{
-    name: 'Guy',
-    _id: 'agentId'
-  },
-  {
-    name: 'Itsik',
-    _id: 'agentId'
-  },
-  {
-    name: 'Yaniv',
-    _id: 'agentId'
-  },
-  {
-    name: 'Ami',
-    _id: 'agentId'
-  },
-  {
-    name: 'Dan',
-    _id: 'agentId'
-  }]
+  const agentsList = [
+    {
+      name: "Guy",
+      _id: "agentId",
+    },
+    {
+      name: "Itsik",
+      _id: "agentId",
+    },
+    {
+      name: "Yaniv",
+      _id: "agentId",
+    },
+    {
+      name: "Ami",
+      _id: "agentId",
+    },
+    {
+      name: "Dan",
+      _id: "agentId",
+    },
+  ];
+
+  const [agentSelected, setAgentSelected] = React.useState('');
 
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar
+          numSelected={selected.length}
+          items={[]}
+          handleClose={handleClose}
+          handleClickOpen={handleClickOpen}
+          open={open}
+          assignTask={assignTask}
+          setAgentName={setAgentName}
+          setAgentId={setAgentId}
+        />
+
         <TableContainer>
           <Table
             className={classes.table}
@@ -489,17 +646,45 @@ const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons,handleClickOpe
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
-       <div className={classes.assignDiv}>
-          {/*<Button variant="outlined" color="primary" onClick={() => assignTask()}>
+      <div className={classes.assignDiv}>
+        {/*<Button variant="outlined" color="primary" onClick={() => assignTask()}>
           <ListItemIcon>
             ASSIGN TASK
               <LabelImportantIcon />
           </ListItemIcon>
         </Button>*/}
-        <FullScreenDialog items={agentsList} handleClickOpen={handleClickOpen} handleClose={handleClose} open={open} assignTask={assignTask} setAgentName={ setAgentName } setAgentId={ setAgentId } />
-        </div>
+        <FullScreenDialog
+          items={agentsList}
+          handleClickOpen={handleClickOpen}
+          handleClose={handleClose}
+          open={open}
+          buttonLabel="Assign task"
+          title="Assign"
+          Component={
+            <Select
+              autoFocus
+              variant="outlined"
+              value={selected}
+              onChange={(event) => {
+                setAgentSelected(event.target.value as string);
+                setAgentName(event.target.value as string);
+                setAgentId(
+                  String(agentsList.find((item) => item.name === event.target.value))
+                );
+              }}
+            >
+              {agentsList.map((item) => {
+                return <MenuItem value={item.name}>{item.name}</MenuItem>;
+              })}
+            </Select>
+          }
+          assignTask={assignTask}
+          setAgentName={setAgentName}
+          setAgentId={setAgentId}
+        />
+      </div>
     </div>
   );
-}
+};
 
-export default EnhancedTable
+export default EnhancedTable;
