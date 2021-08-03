@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import clsx from "clsx";
-import {
-  createStyles,
-  lighten,
-  makeStyles,
-  Theme,
-} from "@material-ui/core/styles";
+import {createStyles,lighten,makeStyles,Theme} from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -24,11 +19,10 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
-import axios from "axios";
 import { Data } from "../interfaces/tasks-data.interface";
 import FullScreenDialog from "../components/FullScreenDialog";
 import { MenuItem, Select, TextField } from "@material-ui/core";
-
+import BOServices from '../BOServices';
 interface HeadCell {
   disablePadding: boolean;
   id: keyof Data;
@@ -488,41 +482,28 @@ const EnhancedTable: React.FC<TableProps> = ({
 
   const isSelected = (id: string) => selected.indexOf(id) !== -1;
 
-  const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, dataRows.length - page * rowsPerPage);
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, dataRows.length - page * rowsPerPage);
 
   const [agentName, setAgentName] = useState("");
   const [agentId, setAgentId] = useState("");
 
   const assignTask = async () => {
-    // debugger
-    const config = {
-      headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTAyODJlZDM2ZWU3NzAwMzFmODQzYmIiLCJpYXQiOjE2Mjc5Nzk2OTYsImV4cCI6MTYzMDU3MTY5Nn0.wSG-h9S8lvFOcJedaEEyiYFdilNYm6AB6UhqxOrxGwk",
-      },
-    };
+
 
     if (selected.length > 1) {
-      const response = await axios.post(
-        `http://localhost:8000/gateway/v1/tasks/assign`,
-        {
-          agent_id: agentId,
-          agent_name: agentName,
-          tasksIds: selected,
-        },
-        config
-      );
+      const response = await BOServices.assignMultipleTasks({
+        agentId: agentId,
+        agentName: agentName,
+        tasksIds: selected
+      });
+
       alert(JSON.stringify(response, null, 2));
     } else {
-      const response = await axios.put(
-        `http://localhost:8000/gateway/v1/tasks/${selected[0]}/assign`,
-        {
-          agent_id: agentId,
-          agent_name: agentName,
-        },
-        config
-      );
+      const response = await BOServices.assignTask({
+        agent_id: agentId,
+        agent_name: agentName,
+      }, selected[0]);
+      
       alert(JSON.stringify(response, null, 2));
     }
   };

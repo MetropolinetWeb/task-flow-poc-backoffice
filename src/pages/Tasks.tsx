@@ -12,8 +12,8 @@ import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import moment from "moment";
 import { Data } from "../interfaces/tasks-data.interface";
 import { Task } from "../interfaces/tasks.interface";
-import axios from "axios";
 import React from "react";
+import BOServices from '../BOServices';
 
 const groups = [
   { id: "Guy", title: "Guy", rightTitle: "Agent", stackItems: true },
@@ -59,7 +59,7 @@ const createTimeline = (tasks: Task[]) => {
   const createTimelineTasks = tasks.map((task: Task, index) => {
     return {
       id: task?.id,
-      group: task.assignment_info.agent_name,
+      group: '',//task.assignment_info.agent_name,
       title: task.name,
       start_time: moment(task.start_time).add(2, "hour"),
       end_time: moment().add(task.duration, "hour"),
@@ -120,21 +120,16 @@ const TaskPage: FC = () => {
     }
   );
   const [showActions, setShowActions] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const baseUrl = "http://localhost:8000/gateway/v1/";
+  //const [loading, setLoading] = useState(false);
+  
 
   const callSetShowActions = () => {
     setShowActions(!showActions);
   };
 
   const fetchTasksData = async () => {
-    setLoading(true);
-    const response = await axios.get(`${baseUrl}tasks/systems/3`, {
-      headers: {
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTAyODJlZDM2ZWU3NzAwMzFmODQzYmIiLCJpYXQiOjE2Mjc5Nzk2OTYsImV4cCI6MTYzMDU3MTY5Nn0.wSG-h9S8lvFOcJedaEEyiYFdilNYm6AB6UhqxOrxGwk",
-      },
-    });
+    const response = await BOServices.getTaskBySystemId(3);
+    //setLoading(true);
 
     const tasks: Task[] = response.data.data.tasks || [];
     setTasks(tasks);
@@ -158,7 +153,7 @@ const TaskPage: FC = () => {
 
   useEffect(() => {
     fetchTasksData();
-    setLoading(false);
+    //setLoading(false);
   }, []);
 
   const [open, setOpen] = React.useState(false);
@@ -186,21 +181,13 @@ const TaskPage: FC = () => {
 
 
   const submitSearch = async () => {
-    const results = await axios.post(
-      `${baseUrl}tasks/search`,
-      {
-        text: value.text,
-        fields: ["name", "type", "description"],
-        index: "tasks",
-      },
-      {
-        headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTAyODJlZDM2ZWU3NzAwMzFmODQzYmIiLCJpYXQiOjE2Mjc5Nzk2OTYsImV4cCI6MTYzMDU3MTY5Nn0.wSG-h9S8lvFOcJedaEEyiYFdilNYm6AB6UhqxOrxGwk",
-        },
-      }
-    );
-
+    
+   const results = await BOServices.taskSearch({
+      text: value.text,
+      fields: ["name", "type", "description"],
+      index: "tasks",
+    });
+    
     const tasks: Task[] = results.data.data.tasks || [];
     if(tasks.length < 1) {
       alert('Your search results came empty');
@@ -230,10 +217,8 @@ const TaskPage: FC = () => {
 
   return (
     <div>
-      {loading ? (
-        "loading"
-      ) : (
-        <div>
+      {/*{loading ? ("loading") : ()}*/}
+       <div>
             <Timeline groups={groups} items={createTimeline(tasks).createTimelineTasks}
               sidebarWidth={100}
               rightSidebarContent={'Agents'}
@@ -296,7 +281,6 @@ const TaskPage: FC = () => {
 
          
         </div>
-      )}
     </div>
   );
 };
