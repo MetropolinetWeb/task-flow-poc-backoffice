@@ -224,8 +224,9 @@ const TaskPage: FC = () => {
                 <Button color="primary"><ListItemIcon><UpdateIcon />EDIT</ListItemIcon></Button>
                 <Button color="primary" onClick={handleClickOpen}><ListItemIcon><AssignmentIndIcon />ASSIGN</ListItemIcon></Button>
               </Box>
+
           </div>
-          <PanelGroup spacing={5} panelWidths={[{ size: 1550, minSize: 800},{ size: 450, minSize: 450}]}>
+          <PanelGroup spacing={5} panelWidths={[{ size: 1450, minSize: 800},{ size: 450, minSize: 450}]}>
               <TaskData dataRows={dataRows} setButtons={callSetShowActions} handleClose={handleClose} handleClickOpen={handleClickOpen} open={open}/>
             <FullWidthTabs selectedTask={selectedTask} />
           </PanelGroup>

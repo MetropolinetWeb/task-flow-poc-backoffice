@@ -64,6 +64,8 @@ const FullWidthTabs: React.FC<{selectedTask: Task}> = ({selectedTask}) => {
   const handleChangeIndex = (index: number) => {
     setValue(index);
   };
+ 
+  const jsonTaskArr = Object.entries(selectedTask);
 
   return (
     <div className={classes.root}>
@@ -87,8 +89,24 @@ const FullWidthTabs: React.FC<{selectedTask: Task}> = ({selectedTask}) => {
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
+          
           <p>Task Details</p>
-          {JSON.stringify(selectedTask.id.length < 1 ? null: selectedTask, null, 2)}
+          <div className="floatL alignL">
+            {/*{JSON.stringify(selectedTask.id.length < 1 ? null: jsonTaskArr, null, 2)}*/}
+            <p>Name: <span className="blu">{selectedTask.name}</span></p>
+            <p>System:  <span className="blu">{selectedTask.system.name}</span></p>
+            <p>Type:  <span className="blu">{selectedTask.type}</span></p>
+            <p>State:  <span className="blu">{selectedTask.state.stateHistory[0].currentState}</span></p>
+            <p>Assign To:  <span className="blu">{selectedTask.assignment_info.agent_name}</span></p>
+            <p>Description:  <span className="blu">{selectedTask.description}</span></p>
+            <p>Start Time:  <span className="blu">{selectedTask.start_time}</span></p>
+            <p>Created Time:  <span className="blu">{selectedTask.created_at}</span></p>
+            <p>Created By:  <span className="blu">missing</span></p>
+            <p>Estimated Duration:  <span className="blu">missing</span></p>
+            <p>Last Date To Preform:  <span className="blu">missing</span></p>
+            <p>ExecutionDate:  <span className="blu">missing</span></p>
+            <p>Actual Duration:  <span className="blu">missing</span></p>
+          </div>
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           <p>Agent Details</p>
