@@ -48,6 +48,12 @@
   padding: 1rem;
   float:left;
 }
+.alignL {
+  text-align: left;
+}
+.blu{
+  color: blue;
+}
 .react-calendar-timeline .rct-dateHeader-primary .color-change{
   background-color:antiquewhite;
   color:black;

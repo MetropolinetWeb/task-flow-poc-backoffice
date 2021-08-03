@@ -137,7 +137,7 @@ const TaskPage: FC = () => {
     const response = await axios.get(`${baseUrl}tasks/systems/3`, {
       headers: {
         Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTA2YTBhOWY2YTA3NTAwMzBjYzY4OTIiLCJpYXQiOjE2Mjc4MjQzNDYsImV4cCI6MTYzMDQxNjM0Nn0.IXVQnjVkH42L-fUBpU4qD5_YabUEpdSaxMjq8VJnUQA",
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTA2YTBhOWY2YTA3NTAwMzBjYzY4OTIiLCJpYXQiOjE2Mjc5Mjg3NDQsImV4cCI6MTYzMDUyMDc0NH0.8Uvy8tgflSxbN7J8hkw3BilDIrJpB-dvgofRYsNcRlc",
       },
     });
 
@@ -345,6 +345,15 @@ const TaskPage: FC = () => {
               handleClickOpen={handleClickOpen}
               open={open}
             />
+            <Button color="primary"><ListItemIcon><LibraryAddIcon />NEW</ListItemIcon></Button>
+              <Box hidden={showActions} className="floatR">
+                <Button color="primary"><ListItemIcon><DeleteIcon />DELETE</ListItemIcon></Button>
+                <Button color="primary"><ListItemIcon><UpdateIcon />EDIT</ListItemIcon></Button>
+                <Button color="primary" onClick={handleClickOpen}><ListItemIcon><AssignmentIndIcon />ASSIGN</ListItemIcon></Button>
+              </Box>
+            </PanelGroup>
+          <PanelGroup spacing={5} panelWidths={[{ size: 1450, minSize: 800},{ size: 450, minSize: 450}]}>
+              <TaskData dataRows={dataRows} setButtons={callSetShowActions} handleClose={handleClose} handleClickOpen={handleClickOpen} open={open}/>
             <FullWidthTabs selectedTask={selectedTask} />
           </PanelGroup>
         </div>
