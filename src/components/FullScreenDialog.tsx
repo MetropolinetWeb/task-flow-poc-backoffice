@@ -42,18 +42,18 @@ export default function FullScreenDialog(props: {
   items: { name: string; _id: string }[];
   title: string;
   buttonLabel: string;
-  Component: ReactElement<any, any>
+  Component: ReactElement<any, any>;
+  currentSelection?: any;
 }) {
   const classes = useStyles();
-  const [selected, setSelected] = React.useState("None");
 
-  const [open, setOpen] = React.useState(true);
-
-  const handleAgentSelectChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelected(event.target.value as string);
-    props.setAgentName(event.target.value as string);
-    props.setAgentId(String(props.items.find((item) => item.name === event.target.value)))
-  };
+  const displaySelected = (currentSelection: any) => {
+    if(currentSelection){
+      return <Typography gutterBottom>
+            Chosen Agent: <span className="blu">{ currentSelection }</span>
+          </Typography>
+    } else return null
+  }
 
   return (
     <div>
@@ -79,21 +79,15 @@ export default function FullScreenDialog(props: {
         </AppBar>
         <DialogContent dividers>
           <Typography gutterBottom>
-          <Select fullWidth autoFocus variant="outlined" value={selected} onChange={handleAgentSelectChange}>
-              {props.items.map((item) => {
-                return (<MenuItem value={item.name}>{item.name}</MenuItem>)
-              })}
-          </Select>
+            {props.Component}
           </Typography>
-          <Typography gutterBottom>
-            Chosen Agent: <span className="blu">{ selected }</span>
-          </Typography>
+          {displaySelected(props.currentSelection)}
         </DialogContent>
         <DialogActions>
-        <Button variant="outlined" color="primary" onClick={() => {
+        <Button variant="outlined" color="primary" fullWidth onClick={() => {
           props.assignTask();
           props.handleClose();
-        }}>Assign</Button>
+        }}>{props.buttonLabel}</Button>
         </DialogActions>      
         <hr/>
       </Dialog>
