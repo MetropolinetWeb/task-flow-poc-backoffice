@@ -6,8 +6,6 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import { Button, ListItemIcon } from '@material-ui/core';
-import LabelImportantIcon from '@material-ui/icons/LabelImportant';
 import { Task } from '../interfaces/tasks.interface';
 
 
@@ -65,7 +63,7 @@ const FullWidthTabs: React.FC<{selectedTask: Task}> = ({selectedTask}) => {
     setValue(index);
   };
  
-  const jsonTaskArr = Object.entries(selectedTask);
+  //const jsonTaskArr = Object.entries(selectedTask);
 
   return (
     <div className={classes.root}>

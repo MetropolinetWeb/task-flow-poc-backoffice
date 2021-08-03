@@ -137,7 +137,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
     description: "",
   });
 
-  const [searchFields, setSearchFields] = React.useState<string[]>([]);
+  //const [searchFields, setSearchFields] = React.useState<string[]>([]);
   
   const handleFilterChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const {name, value} = event.target;
