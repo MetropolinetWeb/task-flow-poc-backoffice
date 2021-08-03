@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import { TransitionProps } from '@material-ui/core/transitions';
-import { MenuItem, Select } from '@material-ui/core';
+import { DialogActions, DialogContent, MenuItem, Select } from '@material-ui/core';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -53,17 +53,27 @@ export default function FullScreenDialog(props: { handleClickOpen: () => void, h
             </Typography>
           </Toolbar>
         </AppBar>
-        <hr/>
-        <Select autoFocus variant="outlined" value={selected} onChange={handleAgentSelectChange}>
-          {props.items.map((item) => {
-            return (<MenuItem value={item.name}>{item.name}</MenuItem>)
-          })}
+        <DialogContent dividers>
+          <Typography gutterBottom>
+          <Select fullWidth autoFocus variant="outlined" value={selected} onChange={handleAgentSelectChange}>
+              {props.items.map((item) => {
+                return (<MenuItem value={item.name}>{item.name}</MenuItem>)
+              })}
           </Select>
-        <hr/>
+          </Typography>
+          <Typography gutterBottom>
+            Chosen Agent: { selected }
+          </Typography>
+        </DialogContent>
+        <DialogActions>
         <Button variant="outlined" color="primary" onClick={() => {
           props.assignTask();
           props.handleClose();
         }}>Assign</Button>
+        </DialogActions>
+        
+        <hr/>
+       
       </Dialog>
     </div>
   );

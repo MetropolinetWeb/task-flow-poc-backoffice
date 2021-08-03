@@ -89,12 +89,9 @@ const FullWidthTabs: React.FC<{selectedTask: Task}> = ({selectedTask}) => {
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          
-          <p>Task Details</p>
+           {/*{JSON.stringify(selectedTask.id.length < 1 ? null: jsonTaskArr, null, 2)}*/}
+          <h4>{selectedTask.system.name} - {selectedTask.name}</h4>
           <div className="floatL alignL">
-            {/*{JSON.stringify(selectedTask.id.length < 1 ? null: jsonTaskArr, null, 2)}*/}
-            <p>Name: <span className="blu">{selectedTask.name}</span></p>
-            <p>System:  <span className="blu">{selectedTask.system.name}</span></p>
             <p>Type:  <span className="blu">{selectedTask.type}</span></p>
             <p>State:  <span className="blu">{selectedTask.state.stateHistory[0].currentState}</span></p>
             <p>Assign To:  <span className="blu">{selectedTask.assignment_info.agent_name}</span></p>

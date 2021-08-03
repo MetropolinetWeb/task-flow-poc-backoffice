@@ -476,7 +476,7 @@ const EnhancedTable: React.FC<TableProps> = ({dataRows,setButtons,handleClickOpe
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 10, 15]}
           component="div"
           count={dataRows.length}
           rowsPerPage={rowsPerPage}
