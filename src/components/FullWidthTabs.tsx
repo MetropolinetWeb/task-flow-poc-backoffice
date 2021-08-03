@@ -81,27 +81,25 @@ const FullWidthTabs: React.FC<{selectedTask: Task}> = ({selectedTask}) => {
           <Tab label="Info" {...a11yProps(2)} />
         </Tabs>
       </AppBar>
-      <SwipeableViews
-        axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'}
-        index={value}
-        onChangeIndex={handleChangeIndex}
-      >
+      <SwipeableViews axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'} index={value} onChangeIndex={handleChangeIndex}>
         <TabPanel value={value} index={0} dir={theme.direction}>
-           {/*{JSON.stringify(selectedTask.id.length < 1 ? null: jsonTaskArr, null, 2)}*/}
-          <h4>{selectedTask.system.name} - {selectedTask.name}</h4>
-          <div className="floatL alignL">
-            <p>Type:  <span className="blu">{selectedTask.type}</span></p>
-            <p>State:  <span className="blu">{selectedTask.state.stateHistory[0].currentState}</span></p>
-            <p>Assign To:  <span className="blu">{selectedTask.assignment_info.agent_name}</span></p>
-            <p>Description:  <span className="blu">{selectedTask.description}</span></p>
-            <p>Start Time:  <span className="blu">{selectedTask.start_time}</span></p>
-            <p>Created Time:  <span className="blu">{selectedTask.created_at}</span></p>
-            <p>Created By:  <span className="blu">missing</span></p>
-            <p>Estimated Duration:  <span className="blu">missing</span></p>
-            <p>Last Date To Preform:  <span className="blu">missing</span></p>
-            <p>ExecutionDate:  <span className="blu">missing</span></p>
-            <p>Actual Duration:  <span className="blu">missing</span></p>
-          </div>
+          {selectedTask && selectedTask.id.length > 1 && <div>
+            <h4>{selectedTask.system.name} - {selectedTask.name}</h4>
+            <div className="floatL alignL">
+              <p>Type:  <span className="blu">{selectedTask.type}</span></p>
+              <p>State:  <span className="blu">{selectedTask.state.stateHistory[0].currentState}</span></p>
+              <p>Assign To:  <span className="blu">{selectedTask.assignment_info.agent_name}</span></p>
+              <p>Description:  <span className="blu">{selectedTask.description}</span></p>
+              <p>Start Time:  <span className="blu">{selectedTask.start_time}</span></p>
+              <p>Created Time:  <span className="blu">{selectedTask.created_at}</span></p>
+              <p>Created By:  <span className="blu">missing</span></p>
+              <p>Estimated Duration:  <span className="blu">missing</span></p>
+              <p>Last Date To Preform:  <span className="blu">missing</span></p>
+              <p>ExecutionDate:  <span className="blu">missing</span></p>
+              <p>Actual Duration:  <span className="blu">missing</span></p>
+            </div>
+          </div>}
+          
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           <p>Agent Details</p>

@@ -45,9 +45,15 @@ export default function FullScreenDialog(props: {
   Component: ReactElement<any, any>
 }) {
   const classes = useStyles();
-  const [selected, setSelected] = React.useState("Choose Agent");
+  const [selected, setSelected] = React.useState("None");
 
   const [open, setOpen] = React.useState(true);
+
+  const handleAgentSelectChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSelected(event.target.value as string);
+    props.setAgentName(event.target.value as string);
+    props.setAgentId(String(props.items.find((item) => item.name === event.target.value)))
+  };
 
   return (
     <div>
@@ -80,7 +86,7 @@ export default function FullScreenDialog(props: {
           </Select>
           </Typography>
           <Typography gutterBottom>
-            Chosen Agent: { selected }
+            Chosen Agent: <span className="blu">{ selected }</span>
           </Typography>
         </DialogContent>
         <DialogActions>
