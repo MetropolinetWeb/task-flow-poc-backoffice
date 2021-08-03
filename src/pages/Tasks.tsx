@@ -7,17 +7,18 @@ import Timeline , {
 import { FC, useState, useEffect } from "react";
 import PanelGroup from "react-panelgroup";
 import FullWidthTabs from "../components/FullWidthTabs";
-import { Box, Button, ListItemIcon } from "@material-ui/core";
+import { Box, Button, ListItemIcon, TextField } from "@material-ui/core";
 import LibraryAddIcon from "@material-ui/icons/LibraryAdd";
-import UpdateIcon from '@material-ui/icons/Update';
-import DeleteIcon from '@material-ui/icons/Delete';
+import UpdateIcon from "@material-ui/icons/Update";
+import DeleteIcon from "@material-ui/icons/Delete";
 import TaskData from "../components/TaskData";
-import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import moment from "moment";
 import { Data } from "../interfaces/tasks-data.interface";
 import { Task } from "../interfaces/tasks.interface";
 import axios from "axios";
 import React from "react";
+import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 
 const groups = [
   { id: "Guy", title: "Guy", rightTitle: "Agent", stackItems: true },
@@ -175,6 +176,54 @@ const TaskPage: FC = () => {
     setOpen(false);
   };
 
+  const [value, setValue] = React.useState({
+    text: "",
+  });
+
+
+
+  const submitSearch = async () => {
+    const results = await axios.post(
+      `${baseUrl}tasks/search`,
+      {
+        text: value.text,
+        fields: ["name", "type", "description"],
+        index: "tasks",
+      },
+      {
+        headers: {
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTAyODJlZDM2ZWU3NzAwMzFmODQzYmIiLCJpYXQiOjE2Mjc4MDY4NDQsImV4cCI6MTYzMDM5ODg0NH0.JVESKVFnV1GySLzeNXQah19ZRuMwE9FNtyKwCgcOCkk",
+        },
+      }
+    );
+
+    const tasks: Task[] = results.data.data.tasks || [];
+    if(tasks.length < 1) {
+      alert('Your search results came empty');
+      return null
+    }
+
+    setTasks(tasks);
+    const modifiedTasks = tasks.map((task: Task) => {
+      return createData(
+        task.id,
+        task.name,
+        task.type,
+        task.state.stateHistory[0].currentState,
+        task.description,
+        task.start_time,
+        task.duration,
+        task.assignment_info?.agent_name || "task is not assigned",
+        task.created_at,
+        task.updated_at,
+        task.system.type
+      );
+    });
+    setDataRows(modifiedTasks);
+  };
+
+  
   const onTaskDrag = (itemDragObject: any) => {
     if (itemDragObject.eventType === "move") {
       console.log('set new object to time line with time: ' + itemDragObject.time.toString());
@@ -191,6 +240,43 @@ const TaskPage: FC = () => {
         "loading"
       ) : (
         <div>
+          <Timeline
+            groups={groups}
+            items={createTimeline(tasks).createTimelineTasks}
+            defaultTimeStart={moment().add(-12, "hour")}
+            defaultTimeEnd={moment().add(12, "hour")}
+            onItemDoubleClick={(itemId, e, time) => {
+              //@ts-ignore
+              setSelectedTask(tasks.find((task) => task.id === itemId));
+            }}
+          />
+          <div style={{ padding: "1rem", float: "right", margin: "0.5rem" }}>
+            <TextField
+              id="standard-search"
+              label="Search field"
+              type="search"
+              value={value.text}
+              onChange={(event) => {
+                setValue({
+                  ...value,
+                  text: event.target.value,
+                });
+              }}
+            />
+            <Button
+              color="primary"
+              style={{
+                border: "1.5px solid blue",
+                margin: "0.5rem",
+              }}
+              onClick={() => {
+                submitSearch();
+              }}
+            >
+              Search
+            </Button>
+          </div>
+          
             <Timeline groups={groups} items={createTimeline(tasks).createTimelineTasks}
               sidebarWidth={100}
               rightSidebarContent={'Agents'}
@@ -218,20 +304,58 @@ const TaskPage: FC = () => {
               </Timeline>
                     
           <div className="floatL">
+            <Button color="primary">
+              <ListItemIcon>
+                <LibraryAddIcon />
+                NEW
+              </ListItemIcon>
+            </Button>
+            <Box hidden={showActions} className="floatR">
+              <Button color="primary">
+                <ListItemIcon>
+                  <DeleteIcon />
+                  DELETE
+                </ListItemIcon>
+              </Button>
+              <Button color="primary">
+                <ListItemIcon>
+                  <UpdateIcon />
+                  EDIT
+                </ListItemIcon>
+              </Button>
+              <Button color="primary" onClick={handleClickOpen}>
+                <ListItemIcon>
+                  <AssignmentIndIcon />
+                  ASSIGN
+                </ListItemIcon>
+              </Button>
+            </Box>
+          </div>
+          <PanelGroup
+            spacing={5}
+            panelWidths={[
+              { size: 1320, minSize: 500 },
+              { size: 550, minSize: 550 },
+            ]}
+          >
+            <TaskData
+              dataRows={dataRows}
+              setButtons={callSetShowActions}
+              handleClose={handleClose}
+              handleClickOpen={handleClickOpen}
+              open={open}
+            />
             <Button color="primary"><ListItemIcon><LibraryAddIcon />NEW</ListItemIcon></Button>
               <Box hidden={showActions} className="floatR">
                 <Button color="primary"><ListItemIcon><DeleteIcon />DELETE</ListItemIcon></Button>
                 <Button color="primary"><ListItemIcon><UpdateIcon />EDIT</ListItemIcon></Button>
                 <Button color="primary" onClick={handleClickOpen}><ListItemIcon><AssignmentIndIcon />ASSIGN</ListItemIcon></Button>
               </Box>
-
-          </div>
+            </PanelGroup>
           <PanelGroup spacing={5} panelWidths={[{ size: 1450, minSize: 800},{ size: 450, minSize: 450}]}>
               <TaskData dataRows={dataRows} setButtons={callSetShowActions} handleClose={handleClose} handleClickOpen={handleClickOpen} open={open}/>
             <FullWidthTabs selectedTask={selectedTask} />
           </PanelGroup>
-
-         
         </div>
       )}
     </div>
