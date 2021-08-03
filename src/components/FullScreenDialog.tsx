@@ -45,9 +45,9 @@ export default function FullScreenDialog(props: {
   Component: ReactElement<any, any>
 }) {
   const classes = useStyles();
-  //const [selected, setSelected] = React.useState("Choose Agent");
+  const [selected, setSelected] = React.useState("Choose Agent");
 
-  //const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(true);
 
   return (
     <div>
