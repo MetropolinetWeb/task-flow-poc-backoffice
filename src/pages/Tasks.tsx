@@ -86,7 +86,11 @@ const createTimeline = (tasks: Task[]) => {
   return { createTimelineTasks, createTimelineGroups };
 };
 
+
+
+
 const TaskPage: FC = () => {
+
   const [dataRows, setDataRows] = useState<Data[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedTask, setSelectedTask] = useState<Task>(
@@ -129,7 +133,7 @@ const TaskPage: FC = () => {
   };
 
   const fetchTasksData = async () => {
-    await getAgentsBySystemId(3);
+    //await getAgentsBySystemId(3);
 
     const response = await BOServices.getTaskBySystemId(3);
 
@@ -157,17 +161,17 @@ const TaskPage: FC = () => {
   
   const [agentsList, setAgentList] = React.useState<{ name: any; _id: any; }[]>([]);
 
-  const getAgentsBySystemId = async (systemType: number) => {
-    const {data} = await BOServices.getAgentsBySystemType(systemType);
-    const {agents} = data.data;
+  //const getAgentsBySystemId = async (systemType: number) => {
+  //  const {data} = await BOServices.getAgentsBySystemType(systemType);
+  //  const {agents} = data.data;
 
-    const list = _.map(agents, (agent) => _.assign({
-      name: _.get(agent, 'name'),
-      _id: _.get(agent, '_id')
-    },{}));
+  //  const list = _.map(agents, (agent) => _.assign({
+  //    name: _.get(agent, 'name'),
+  //    _id: _.get(agent, '_id')
+  //  },{}));
 
-    setAgentList(list);  
-  }
+  //  setAgentList(list);  
+  //}
 
   useEffect(() => {
     fetchTasksData();
@@ -207,13 +211,16 @@ const TaskPage: FC = () => {
     });
     
     const tasks: Task[] = results.data.data.tasks || [];
-    if(tasks.length < 1) {
+
+    const source = _.map(tasks, '_source');
+
+    if (source.length < 1) {
       alert('Your search results came empty');
       return null
     }
 
-    setTasks(tasks);
-    const modifiedTasks = tasks.map((task: Task) => {
+    setTasks(source);
+    const modifiedTasks = source.map((task: Task) => {
       return createData(
         task.id,
         task.name,
