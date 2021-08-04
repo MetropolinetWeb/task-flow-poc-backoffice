@@ -27,7 +27,9 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import axios from "axios";
 import { Data } from "../interfaces/tasks-data.interface";
 import FullScreenDialog from "../components/FullScreenDialog";
-import { MenuItem, Select, TextField } from "@material-ui/core";
+import { FormControl, FormGroup, FormHelperText, FormLabel, MenuItem, Select, TextField } from "@material-ui/core";
+import _ from "lodash";
+import { useEffect } from "react";
 
 interface HeadCell {
   disablePadding: boolean;
@@ -58,6 +60,7 @@ interface EnhancedTableToolbarProps {
   setAgentName: (name: string) => void;
   setAgentId: (id: string) => void;
   items: { name: string; _id: string }[];
+  submitSearch: (text: string, fields?: string[]) => Promise<null | undefined>;
 }
 
 type Order = "asc" | "desc";
@@ -118,6 +121,9 @@ const useToolbarStyles = makeStyles((theme: Theme) =>
     title: {
       flex: "1 1 100%",
     },
+    formControl: {
+      margin: theme.spacing(3),
+    },
   })
 );
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
@@ -127,21 +133,36 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
   const [open, setOpen] = React.useState(false);
 
   const [filters, setFilters] = React.useState({
-    authority: "",
-    state: "",
-    id: "",
-    agentName: "",
-    createdBy: "",
-    name: "",
-    type: "",
-    description: "",
+    state: false,
+    id: false,
+    name: false,
+    type: false,
+    description: false,
   });
 
-  //const [searchFields, setSearchFields] = React.useState<string[]>([]);
-  
-  const handleFilterChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    const {name, value} = event.target;
-    setFilters({ ...filters, [name]: value});
+  const [searchText, setSearchText] = React.useState({text: ''});
+
+  const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const {name, checked} = event.target;
+    setFilters({ ...filters, [name]: checked });
+  }
+
+  const handleTextSearch = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSearchText({...searchText, text: event.target.value})
+  }
+
+  const {state, id, name, type, description} = filters;
+
+  const filterArray = [state, id, name, type, description];
+  const error = filterArray.filter((filter) => filter).length < 1;
+  const getCheckedFields = () => {
+    let checked: string[] = [];
+    Object.entries(filters).map(entry => {
+      if(entry[1] === true){
+        checked.push(entry[0])
+      }
+    })
+    return checked
   }
 
   return (
@@ -205,86 +226,49 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           >
             <TextField
               id="standard-search"
-              label="Search by task name"
+              label="Search anything 😊"
               type="search"
-              name="name"
-              value={filters.name}
+              value={searchText.text}
               onChange={(event) => {
-                handleFilterChange(event);
+                handleTextSearch(event);
               }}
             />
 
-            <TextField
-              id="standard-search"
-              label="Search by task type"
-              type="search"
-              name="type"
-              value={filters.type}
-              onChange={(event) => {
-                handleFilterChange(event);
-              }}
-            />
-            <TextField
-              id="standard-search"
-              label="Search by description"
-              type="search"
-              name="description"
-              value={filters.description}
-              onChange={(event) => {
-                handleFilterChange(event);
-              }}
-            />
-
-            <TextField
-              id="standard-search"
-              label="Search by authority"
-              type="search"
-              name="authority"
-              value={filters.authority}
-              onChange={(event) => {
-                setFilters({
-                  ...filters,
-                  authority: event.target.value,
-                });
-              }}
-            />
-
-            <TextField
-              id="standard-search"
-              label="Search by task state"
-              type="search"
-              value={filters.state}
-              name="state"
-              onChange={(event) => {
-                handleFilterChange(event);
-              }}
-            />
-
-            <TextField
-              id="standard-search"
-              label="Search by task creator"
-              type="search"
-              name="createdBy"
-              value={filters.createdBy}
-              onChange={(event) => {
-                handleFilterChange(event);
-              }}
-            />
-
-            <TextField
-              id="standard-search"
-              label="Search by Agent name"
-              type="search"
-              value={filters.agentName}
-              name="agentName"
-              onChange={(event) => {
-                handleFilterChange(event);
-              }}
-            />
+            <FormControl required error={error} component="fieldset" className={classes.formControl}>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={<Checkbox checked={filters.name} onChange={handleFilterChange} name="name" />}
+                        label="Name"
+                      />
+                      <FormControlLabel
+                        control={<Checkbox checked={filters.description} onChange={handleFilterChange} name="description" />}
+                        label="Description"
+                      />
+                      <FormControlLabel
+                        control={<Checkbox checked={filters.type} onChange={handleFilterChange} name="type" />}
+                        label="Type"
+                      />
+                      <FormControlLabel
+                        control={<Checkbox checked={filters.state} onChange={handleFilterChange} name="state" />}
+                        label="State"
+                      />
+                      {/* <FormControlLabel
+                        control={<Checkbox checked={filters.type} onChange={handleFilterChange} name="type" />}
+                        label="Type"
+                      /> */}
+                      <FormControlLabel
+                        control={<Checkbox checked={filters.id} onChange={handleFilterChange} name="id" />}
+                        label="Unique ID"
+                      />
+                      <FormLabel component="legend">Please pick at lease one field</FormLabel>
+                    </FormGroup>
+                  </FormControl>
           </div>
         </div>}
         buttonLabel="Filter tasks"
-        assignTask={props.assignTask}
+        assignTask={() => {
+          props.submitSearch.call('', searchText.text, getCheckedFields());
+        }}
         setAgentName={props.setAgentName}
         setAgentId={props.setAgentId}
       />
@@ -410,10 +394,15 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface TableProps {
   dataRows: Data[];
+  submitSearch: (text: string, fields?: string[]) => Promise<null | undefined>;
   setButtons: () => void;
   handleClickOpen: () => void;
   handleClose: () => void;
   open: boolean;
+  agentsList: {
+      name: any;
+      _id: any;
+  }[];
 }
 
 const EnhancedTable: React.FC<TableProps> = ({
@@ -422,6 +411,8 @@ const EnhancedTable: React.FC<TableProps> = ({
   handleClickOpen,
   handleClose,
   open,
+  submitSearch,
+  agentsList
 }) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
@@ -527,7 +518,8 @@ const EnhancedTable: React.FC<TableProps> = ({
     }
   };
 
-  const agentsList = [
+
+  const agentList = [
     {
       name: "Guy",
       _id: "agentId",
@@ -556,6 +548,7 @@ const EnhancedTable: React.FC<TableProps> = ({
     <div className={classes.root}>
       <Paper className={classes.paper}>
         <EnhancedTableToolbar
+          submitSearch={submitSearch}
           numSelected={selected.length}
           items={[]}
           handleClose={handleClose}
@@ -654,7 +647,7 @@ const EnhancedTable: React.FC<TableProps> = ({
           </ListItemIcon>
         </Button>*/}
         <FullScreenDialog
-          items={agentsList}
+          items={agentsList || []}
           handleClickOpen={handleClickOpen}
           handleClose={handleClose}
           open={open}
@@ -668,15 +661,17 @@ const EnhancedTable: React.FC<TableProps> = ({
               fullWidth
               value={agentSelected}
               onChange={(event) => {
-                setAgentSelected(event.target.value as string);
-                setAgentName(event.target.value as string);
-                setAgentId(
-                  String(agentsList.find((item) => item.name === event.target.value))
-                );
+                const agent = _.find(agentsList, {_id: event.target.value});
+                const agentName = _.get(agent, 'name');
+
+                setAgentSelected(agentName);
+                setAgentName(agentName);
+
+                setAgentId(event.target.value as string);
               }}
             >
               {agentsList.map((item) => {
-                return <MenuItem value={item.name}>{item.name}</MenuItem>;
+                return <MenuItem value={item._id}>{item.name}</MenuItem>;
               })}
             </Select>
           }

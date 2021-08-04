@@ -36,7 +36,7 @@ export default function FullScreenDialog(props: {
   handleClickOpen: () => void;
   handleClose: () => void;
   open: boolean;
-  assignTask: () => void;
+  assignTask: any;
   setAgentName: (name: string) => void;
   setAgentId: (id: string) => void;
   items: { name: string; _id: string }[];
@@ -86,7 +86,11 @@ export default function FullScreenDialog(props: {
         <DialogActions>
         <Button variant="outlined" color="primary" fullWidth onClick={() => {
           props.assignTask();
-          props.handleClose();
+
+          setTimeout(() => {
+            props.handleClose();
+          }, 2500)
+          
         }}>{props.buttonLabel}</Button>
         </DialogActions>      
         <hr/>

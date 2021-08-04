@@ -14,6 +14,7 @@ import { Data } from "../interfaces/tasks-data.interface";
 import { Task } from "../interfaces/tasks.interface";
 import axios from "axios";
 import React from "react";
+import _ from "lodash";
 
 const groups = [
   { id: "Guy", title: "Guy", rightTitle: "Agent", stackItems: true },
@@ -59,7 +60,8 @@ const createTimeline = (tasks: Task[]) => {
   const createTimelineTasks = tasks.map((task: Task, index) => {
     return {
       id: task?.id,
-      group: task.assignment_info.agent_name,
+      // group: task.assignment_info.agent_name,
+      group: '',
       title: task.name,
       start_time: moment(task.start_time).add(2, "hour"),
       end_time: moment().add(task.duration, "hour"),
@@ -129,6 +131,9 @@ const TaskPage: FC = () => {
 
   const fetchTasksData = async () => {
     setLoading(true);
+
+    await getAgentsBySystemId(3);
+
     const response = await axios.get(`${baseUrl}tasks/systems/3`, {
       headers: {
         Authorization:
@@ -155,6 +160,29 @@ const TaskPage: FC = () => {
     });
     setDataRows(modifiedTasks);
   };
+
+  
+  const [agentsList, setAgentList] = React.useState<{ name: any; _id: any; }[]>([]);
+
+  const getAgentsBySystemId = async (systemId: number) => {
+    const config = {
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTAyODJlZDM2ZWU3NzAwMzFmODQzYmIiLCJpYXQiOjE2Mjc5Nzk2OTYsImV4cCI6MTYzMDU3MTY5Nn0.wSG-h9S8lvFOcJedaEEyiYFdilNYm6AB6UhqxOrxGwk",
+      },
+    };
+
+    const {data} = await axios.get(`http://localhost:8000/gateway/v1/agents/systems/${systemId}`, config);
+    const {agents} = data.data;
+
+    const list = _.map(agents, (agent) => _.assign({
+      name: _.get(agent, 'name'),
+      _id: _.get(agent, '_id')
+    },{}));
+
+    console.log(list)
+    setAgentList(list);  
+  }
 
   useEffect(() => {
     fetchTasksData();
@@ -185,12 +213,12 @@ const TaskPage: FC = () => {
 
 
 
-  const submitSearch = async () => {
+  const submitSearch = async (text: string, fields = ["name", "type", "description"]) => {
     const results = await axios.post(
       `${baseUrl}tasks/search`,
       {
-        text: value.text,
-        fields: ["name", "type", "description"],
+        text,
+        fields,
         index: "tasks",
       },
       {
@@ -276,7 +304,7 @@ const TaskPage: FC = () => {
            
             <Button color="primary" style={{border: "1.5px solid blue",margin: "0.5rem"}}
               onClick={() => {
-                submitSearch();
+                submitSearch(value.text);
               }}
             >Search</Button>
           </div>         
@@ -290,7 +318,7 @@ const TaskPage: FC = () => {
 
           </div>
           <PanelGroup spacing={5} panelWidths={[{ size: 1450, minSize: 800},{ size: 450, minSize: 450}]}>
-              <TaskData dataRows={dataRows} setButtons={callSetShowActions} handleClose={handleClose} handleClickOpen={handleClickOpen} open={open}/>
+              <TaskData agentsList={agentsList} submitSearch={submitSearch} dataRows={dataRows} setButtons={callSetShowActions} handleClose={handleClose} handleClickOpen={handleClickOpen} open={open}/>
             <FullWidthTabs selectedTask={selectedTask} />
           </PanelGroup>
 
