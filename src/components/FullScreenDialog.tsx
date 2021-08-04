@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import { TransitionProps } from '@material-ui/core/transitions';
-import { DialogActions, DialogContent, MenuItem, Select } from '@material-ui/core';
+import { DialogActions, DialogContent } from '@material-ui/core';
 
 
 
@@ -73,7 +73,7 @@ export default function FullScreenDialog(props: {
               <CloseIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>
-              Task {props.buttonLabel}
+             {props.buttonLabel}
             </Typography>
           </Toolbar>
         </AppBar>
