@@ -1,4 +1,4 @@
-
+import React from "react";
 import Timeline , {TimelineHeaders,SidebarHeader,DateHeader}from "react-calendar-timeline";
 import { FC, useState, useEffect } from "react";
 import PanelGroup from "react-panelgroup";
@@ -12,7 +12,8 @@ import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import moment from "moment";
 import { Data } from "../interfaces/tasks-data.interface";
 import { Task } from "../interfaces/tasks.interface";
-import React from "react";
+
+import _ from "lodash";
 import BOServices from '../BOServices';
 
 const groups = [
@@ -128,10 +129,12 @@ const TaskPage: FC = () => {
   };
 
   const fetchTasksData = async () => {
+    await getAgentsBySystemId(3);
+
     const response = await BOServices.getTaskBySystemId(3);
-    //setLoading(true);
 
     const tasks: Task[] = response.data.data.tasks || [];
+
     setTasks(tasks);
     const modifiedTasks = tasks.map((task: Task) => {
       return createData(
@@ -150,6 +153,21 @@ const TaskPage: FC = () => {
     });
     setDataRows(modifiedTasks);
   };
+
+  
+  const [agentsList, setAgentList] = React.useState<{ name: any; _id: any; }[]>([]);
+
+  const getAgentsBySystemId = async (systemType: number) => {
+    const {data} = await BOServices.getAgentsBySystemType(systemType);
+    const {agents} = data.data;
+
+    const list = _.map(agents, (agent) => _.assign({
+      name: _.get(agent, 'name'),
+      _id: _.get(agent, '_id')
+    },{}));
+
+    setAgentList(list);  
+  }
 
   useEffect(() => {
     fetchTasksData();
@@ -180,11 +198,11 @@ const TaskPage: FC = () => {
 
 
 
-  const submitSearch = async () => {
+  const submitSearch = async (text: string, fields = ["name", "type", "description"]) => {
     
    const results = await BOServices.taskSearch({
-      text: value.text,
-      fields: ["name", "type", "description"],
+      text: text,
+      fields: fields,
       index: "tasks",
     });
     
@@ -261,7 +279,7 @@ const TaskPage: FC = () => {
            
             <Button color="primary" style={{border: "1.5px solid blue",margin: "0.5rem"}}
               onClick={() => {
-                submitSearch();
+                submitSearch(value.text);
               }}
             >Search</Button>
           </div>         
@@ -275,7 +293,7 @@ const TaskPage: FC = () => {
 
           </div>
           <PanelGroup spacing={5} panelWidths={[{ size: 1450, minSize: 800},{ size: 450, minSize: 450}]}>
-              <TaskData dataRows={dataRows} setButtons={callSetShowActions} handleClose={handleClose} handleClickOpen={handleClickOpen} open={open}/>
+              <TaskData agentsList={agentsList} submitSearch={submitSearch} dataRows={dataRows} setButtons={callSetShowActions} handleClose={handleClose} handleClickOpen={handleClickOpen} open={open}/>
             <FullWidthTabs selectedTask={selectedTask} />
           </PanelGroup>
 
