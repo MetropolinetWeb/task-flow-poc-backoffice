@@ -5,7 +5,7 @@ const BOServices = {
   config: {
     headers: {
       Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTA2YTBhOWY2YTA3NTAwMzBjYzY4OTIiLCJpYXQiOjE2MjgwNjM4NTYsImV4cCI6MTYzMDY1NTg1Nn0.mgOlaQWK67n4z9FRGOgj7qPU-8cqkZ0QWmnXkUjMV-I",
+        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTA2YTBhOWY2YTA3NTAwMzBjYzY4OTIiLCJpYXQiOjE2MjgxNjQ4MDMsImV4cCI6MTYzMDc1NjgwM30.0J-u5AAWTiYrD_O-m4P66KhicnQRbIiDNcE5QBhHWog",
     }
   },
     /* 
@@ -14,32 +14,25 @@ const BOServices = {
 ▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧
 */
   taskSearch: async (content: {}) => {
-    const result = await axios.post(`${BOServices.baseUrl}tasks/search`, content, BOServices.config);
-    return result;
+    return await axios.post(`${BOServices.baseUrl}tasks/search`, content, BOServices.config);
   },
   getTaskBySystemId: async (systemId: number) => {
-    const result = await axios.get(`${BOServices.baseUrl}tasks/systems/${systemId}`, BOServices.config);
-    return result;
+    return await axios.get(`${BOServices.baseUrl}tasks/systems/${systemId}`, BOServices.config);
   },
   assignMultipleTasks: async (content: {}) => {
-    const result = await axios.post(`${BOServices.baseUrl}tasks/assign`, content, BOServices.config);
-    return result;
+    return await axios.post(`${BOServices.baseUrl}tasks/assign`, content, BOServices.config);
   },
   assignTask: async (content: {}, taskId: string) => {
-    const result = await axios.post(`${BOServices.baseUrl}tasks/${taskId}/assign`, content, BOServices.config);
-    return result;
+    return await axios.post(`${BOServices.baseUrl}tasks/${taskId}/assign`, content, BOServices.config);
   },
   createNewTask: async (content: {}) => {
-    const result = await axios.post(`${BOServices.baseUrl}tasks`, content, BOServices.config);
-    return result;
+    return await axios.post(`${BOServices.baseUrl}tasks`, content, BOServices.config);
   },
   deleteTask: async (taskId: string) => {
-    const result = await axios.delete(`${BOServices.baseUrl}tasks/${taskId}`, BOServices.config);
-    return result;
+    return await axios.delete(`${BOServices.baseUrl}tasks/${taskId}`, BOServices.config);
   },
   editTask: async (taskId: string) => {
-    const result = await axios.put(`${BOServices.baseUrl}tasks/${taskId}`, BOServices.config);
-    return result;
+    return await axios.put(`${BOServices.baseUrl}tasks/${taskId}`, BOServices.config);
   },
   /* 
 ▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧
@@ -47,8 +40,7 @@ const BOServices = {
 ▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧
 */
   getAgentsBySystemType: async (systemType: number) => {
-    const result = await axios.get(`${BOServices.baseUrl}agents/systems/${systemType}`, BOServices.config);
-    return result;
+    return await axios.get(`${BOServices.baseUrl}agents/systems/${systemType}`, BOServices.config);
   }
 }
 export default BOServices;

@@ -102,7 +102,6 @@ const SideMenu: React.FC<IView> = ({displayView}) => {
 
 
   const renderIcon = (ind: number) => {
-    console.log(ind);
     switch (ind) {
       case 0:
         return <ListItemIcon><EmojiPeopleIcon /></ListItemIcon>;
@@ -132,7 +131,7 @@ const SideMenu: React.FC<IView> = ({displayView}) => {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-  const [title,setTitle] = useState('Tasks');
+  const [title,setTitle] = useState('Login');
   const handleListItemClick = (text: string) => {
       setTitle(text);
       displayView(text);
@@ -192,6 +191,7 @@ const SideMenu: React.FC<IView> = ({displayView}) => {
               { text === 'Tasks'? taskMenuItem.map((userText) => (<List><ListItem button key={text}>{userText}</ListItem><Divider/></List>)): null}
               { text === 'Forms'? formMenuItem.map((userText) => (<List><ListItem button key={text}>{userText}</ListItem><Divider/></List>)): null}
               { text === 'Agents'? agentMenuItem.map((userText) => (<List><ListItem button key={text}>{userText}</ListItem><Divider/></List>)): null}
+              
             </List>
           </AccordionDetails>
         </Accordion>

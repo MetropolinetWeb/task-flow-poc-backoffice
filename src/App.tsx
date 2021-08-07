@@ -13,29 +13,32 @@ import TasksPage from './pages/Tasks';
 import UploadFilesPage from './pages/UploadFiles';
 import SystemsPage from './pages/Systems';
 import DashboardsPage from './pages/Dashboards';
+import Login from './pages/Login';
 
 
 
 function App() {
-  const [show, setShow] = useState({Users:true, Systems:true, Tasks:false, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:true});
+  const [show, setShow] = useState({Users:true, Systems:true, Tasks:true, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:true, Login: false});
 
   const changeView = (view: string) => {
     switch(view){
-      case 'Users': setShow({Users:false, Systems:true, Tasks:true, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:true});
+      case 'Login': setShow({Users:true, Systems:true, Tasks:true, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:true, Login: false});
+      break;
+      case 'Users': setShow({Users:false, Systems:true, Tasks:true, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:true, Login: true});
         break;
-      case 'Systems': setShow({Users:true, Systems:false, Tasks:true, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:true});
+      case 'Systems': setShow({Users:true, Systems:false, Tasks:true, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:true, Login: true});
         break;
-      case 'Tasks': setShow({Users:true, Systems:true, Tasks:false, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:true});
+      case 'Tasks': setShow({Users:true, Systems:true, Tasks:false, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:true, Login: true});
         break;
-      case 'Forms': setShow({Users:true, Systems:true, Tasks:true, Forms:false, Agents:true, Dashboard:true, Stats:true, UploadFIles:true});
+      case 'Forms': setShow({Users:true, Systems:true, Tasks:true, Forms:false, Agents:true, Dashboard:true, Stats:true, UploadFIles:true, Login: true});
         break;
-      case 'Agents': setShow({Users:true, Systems:true, Tasks:true, Forms:true, Agents:false, Dashboard:true, Stats:true, UploadFIles:true});
+      case 'Agents': setShow({Users:true, Systems:true, Tasks:true, Forms:true, Agents:false, Dashboard:true, Stats:true, UploadFIles:true, Login: true});
         break;
-      case 'Dashboards': setShow({Users:true, Systems:true, Tasks:true, Forms:true, Agents:true, Dashboard:false, Stats:true, UploadFIles:true});
+      case 'Dashboards': setShow({Users:true, Systems:true, Tasks:true, Forms:true, Agents:true, Dashboard:false, Stats:true, UploadFIles:true, Login: true});
         break;
-      case 'Stats': setShow({Users:true, Systems:true, Tasks:true, Forms:true, Agents:true, Dashboard:true, Stats:false, UploadFIles:true});
+      case 'Stats': setShow({Users:true, Systems:true, Tasks:true, Forms:true, Agents:true, Dashboard:true, Stats:false, UploadFIles:true, Login: true});
         break;
-      case 'Upload Files': setShow({Users:true, Systems:true, Tasks:true, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:false});
+      case 'Upload Files': setShow({Users:true, Systems:true, Tasks:true, Forms:true, Agents:true, Dashboard:true, Stats:true, UploadFIles:false, Login: true});
         break;
     }
   };
@@ -53,7 +56,8 @@ function App() {
       <div id="agents" hidden={show.Agents}><AgentsPage /></div>
       <div id="dashbords" hidden={show.Dashboard}><DashboardsPage /></div>
       <div id="stats" hidden={show.Stats}><StatsPage /></div>
-      <div id="upload"  hidden={show.UploadFIles}><UploadFilesPage /></div>
+      <div id="upload" hidden={show.UploadFIles}><UploadFilesPage /></div>
+      <div id="login"  hidden={show.Login}><Login /></div>
     </div>
   );
 }
