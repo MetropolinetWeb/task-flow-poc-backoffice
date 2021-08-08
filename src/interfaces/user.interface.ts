@@ -6,6 +6,6 @@ export interface User {
       name: string;
       type: string;
     }
-    created_at: string;
-    updated_at: string;
+    createdAt: string;
+    updatedAt: string;
   }

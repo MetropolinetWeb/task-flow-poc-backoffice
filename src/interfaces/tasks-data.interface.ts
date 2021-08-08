@@ -4,10 +4,10 @@ export interface Data {
     type: string;
     state: string;
     description: string;
-    start_time: number;
+    startTime: number;
     duration: number;
-    assignment_info: string;
-    created_at: string;
-    updated_at: string;
+    assignmentInfo: string;
+    createdAt: string;
+    updatedAt: string;
     system: string;
   }

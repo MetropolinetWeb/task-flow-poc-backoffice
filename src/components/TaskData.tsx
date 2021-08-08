@@ -73,25 +73,25 @@ const headCells: HeadCell[] = [
   },
   { id: "duration", numeric: true, disablePadding: false, label: "Duration" },
   {
-    id: "start_time",
+    id: "startTime",
     numeric: true,
     disablePadding: false,
     label: "Start Time",
   },
   {
-    id: "assignment_info",
+    id: "assignmentInfo",
     numeric: false,
     disablePadding: false,
     label: "Assigned to",
   },
   {
-    id: "created_at",
+    id: "createdAt",
     numeric: false,
     disablePadding: false,
     label: "Created At",
   },
   {
-    id: "updated_at",
+    id: "updatedAt",
     numeric: false,
     disablePadding: false,
     label: "Updated At",
@@ -151,6 +151,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 
   const filterArray = [state, id, name, type, description];
   const error = filterArray.filter((filter) => filter).length < 1;
+  
   const getCheckedFields = () => {
     let checked: string[] = [];
     Object.entries(filters).map(entry => {
@@ -495,8 +496,8 @@ const EnhancedTable: React.FC<TableProps> = ({
       alert(JSON.stringify(response, null, 2));
     } else {
       const response = await BOServices.assignTask({
-        agent_id: agentId,
-        agent_name: agentName,
+        agentId,
+        agentName,
       }, selected[0]);
       
       alert(JSON.stringify(response, null, 2));
@@ -572,11 +573,11 @@ const EnhancedTable: React.FC<TableProps> = ({
                       <TableCell align="right">{row.type}</TableCell>
                       <TableCell align="right">{row.state}</TableCell>
                       <TableCell align="right">{row.description}</TableCell>
-                      <TableCell align="right">{row.start_time}</TableCell>
+                      <TableCell align="right">{row.startTime}</TableCell>
                       <TableCell align="right">{row.duration}</TableCell>
-                      <TableCell align="right">{row.assignment_info}</TableCell>
-                      <TableCell align="right">{row.created_at}</TableCell>
-                      <TableCell align="right">{row.updated_at}</TableCell>
+                      <TableCell align="right">{row.assignmentInfo}</TableCell>
+                      <TableCell align="right">{row.createdAt}</TableCell>
+                      <TableCell align="right">{row.updatedAt}</TableCell>
                     </TableRow>
                   );
                 })}

@@ -43,7 +43,17 @@ const BOServices = {
 ▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧
 */
   getAgentsBySystemType: async (systemType: number) => {
-    return await axios.get(`${BOServices.baseUrl}agents/systems/${systemType}`, BOServices.config);
+    const result = await axios.get(`${BOServices.baseUrl}agents/systems/${systemType}`, BOServices.config);
+    return result;
+  },
+  /* 
+▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧
+▧▧▧▧▧▧▧▧▧ Form Service ▧▧▧▧▧▧▧▧▧▧▧
+▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧
+*/
+  getFormById: async (formId: string) => {
+    const result = await axios.get(`${BOServices.baseUrl}forms/${formId}`, BOServices.config);
+    return result;
   },
 
   /* 
