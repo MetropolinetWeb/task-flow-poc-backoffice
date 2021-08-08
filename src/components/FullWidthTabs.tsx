@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const FullWidthTabs: React.FC<{selectedTask: Task}> = ({selectedTask}) => {
+const FullWidthTabs = (props: {selectedTask: Task}) => {
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
@@ -83,15 +83,15 @@ const FullWidthTabs: React.FC<{selectedTask: Task}> = ({selectedTask}) => {
       </AppBar>
       <SwipeableViews axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'} index={value} onChangeIndex={handleChangeIndex}>
         <TabPanel value={value} index={0} dir={theme.direction}>
-          {selectedTask && selectedTask.id.length > 1 && <div>
-            <h4>{selectedTask.system.name} - {selectedTask.name}</h4>
+          {props.selectedTask && props.selectedTask.id.length > 1 && <div>
+            <h4>{props.selectedTask.system.name} - {props.selectedTask.name}</h4>
             <div className="floatL alignL">
-              <p>Type:  <span className="blu">{selectedTask.type}</span></p>
-              <p>State:  <span className="blu">{selectedTask.state.stateHistory[0].currentState}</span></p>
-              <p>Assign To:  <span className="blu">{selectedTask.assignmentInfo.agentName}</span></p>
-              <p>Description:  <span className="blu">{selectedTask.description}</span></p>
-              <p>Start Time:  <span className="blu">{selectedTask.startTime}</span></p>
-              <p>Created Time:  <span className="blu">{selectedTask.createdAt}</span></p>
+              <p>Type:  <span className="blu">{props.selectedTask.type}</span></p>
+              <p>State:  <span className="blu">{props.selectedTask.state.stateHistory[0].currentState}</span></p>
+              <p>Assign To:  <span className="blu">{props.selectedTask.assignmentInfo!.agentName}</span></p>
+              <p>Description:  <span className="blu">{props.selectedTask.description}</span></p>
+              <p>Start Time:  <span className="blu">{props.selectedTask.executionDetails.startTime}</span></p>
+              <p>Created Time:  <span className="blu">{props.selectedTask.createdAt}</span></p>
               <p>Created By:  <span className="blu">missing</span></p>
               <p>Estimated Duration:  <span className="blu">missing</span></p>
               <p>Last Date To Preform:  <span className="blu">missing</span></p>
@@ -103,7 +103,7 @@ const FullWidthTabs: React.FC<{selectedTask: Task}> = ({selectedTask}) => {
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           <p>Agent Details</p>
-          {JSON.stringify(selectedTask.id.length < 1 ? null: selectedTask.assignmentInfo, null, 2)}
+          {JSON.stringify(props.selectedTask.id.length < 1 ? null: props.selectedTask.assignmentInfo, null, 2)}
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
         <p>More Information</p>

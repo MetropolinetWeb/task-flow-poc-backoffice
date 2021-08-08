@@ -625,6 +625,7 @@ const EnhancedTable: React.FC<TableProps> = ({
               fullWidth
               value={agentSelected}
               onChange={(event) => {
+              
                 const agent = _.find(agentsList, {_id: event.target.value});
                 const agentName = _.get(agent, 'name');
 

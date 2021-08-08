@@ -60,12 +60,13 @@ const createTimeline = (tasks: Task[]) => {
   });
 
   const createTimelineTasks = tasks.map((task: Task, index) => {
+    debugger
     return {
       id: task?.id,
       group: '',//task.assignment_info.agent_name,
       title: task.name,
-      start_time: moment(task.startTime).add(2, "hour"),
-      end_time: moment().add(task.duration, "hour"),
+      start_time: moment(task.executionDetails.startTime).add(2, "hour"),
+      end_time: moment().add(task.executionDetails.duration, "hour"),
       canMove: true,
       canResize: true,
       canChangeGroup: true,
@@ -95,37 +96,58 @@ const TaskPage = (props:{changeView:(view:string) => void}) => {
 
   const [dataRows, setDataRows] = useState<Data[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [selectedTask, setSelectedTask] = useState<Task>(
-    {
-      assignmentInfo: {
-        agentId: "",
-        agentName: "",
-      },
-      createdAt: "0",
-      description: "",
-      duration: 0,
-      name: "",
-      type: "",
-      updatedAt: "0",
-      startTime: 0,
-      system: {
-        name: "",
-        type: "0",
-      },
-      id: "",
-      state: {
-        availableStates: [],
-        stateHistory: [
-          {
-            createdAt: "",
-            currentState: "",
-            previousState: "",
-            updatedAt: "",
-          },
-        ],
-      },
-    }
-  );
+  const [selectedTask, setSelectedTask] = useState<Task>(JSON.parse(JSON.stringify({
+    "state": {
+      "availableStates": [
+        "new",
+        "in_progress",
+        "done"
+      ],
+      "stateHistory": [
+        {
+          "_id": "610fa3c4e177c100303208db",
+          "updatedAt": "0",
+          "createdAt": "0",
+          "previousState": "null",
+          "currentState": "new"
+        }
+      ]
+    },
+    "tags": [
+      "measurement",
+      "task",
+      "v2"
+    ],
+    "assignmentInfo": "null",
+    "name": "Test Task V2 Fields",
+    "type": "measurement",
+    "description": "Test Task V2 description",
+    "groupBy": [],
+    "executionDetails": {
+      "scheduledDate": 1628673769023,
+      "executionDate": 1628418180079,
+      "lastDateToPerform": 1628932995051,
+      "startTime": 1628414674800,
+      "duration": 4
+    },
+    "system": {
+      "name": "Rabbanut",
+      "type": "3"
+    },
+    "fields": {
+      "name": "Jack Herrer",
+      "identification": "230323423",
+      "authority": "Eilat",
+      "city": "Carmiel",
+      "originalDebt": "3600",
+      "expenses": "101",
+      "payed": "0"
+    },
+    "createdAt": "2021-08-08T09:28:37.015Z",
+    "id": "610fa3c4e177c100303208da",
+    "updatedAt": "2021-08-08T09:28:37.015Z"
+  }
+)));
   const [showActions, setShowActions] = useState(true);
   //const [loading, setLoading] = useState(false);
   
@@ -147,8 +169,8 @@ const TaskPage = (props:{changeView:(view:string) => void}) => {
         task.type,
         task.state.stateHistory[0].currentState,
         task.description,
-        task.startTime,
-        task.duration,
+        task.executionDetails.startTime,
+        task.executionDetails.duration,
         task.assignmentInfo?.agentName || "task is not assigned",
         task.createdAt,
         task.updatedAt,
@@ -162,23 +184,23 @@ const TaskPage = (props:{changeView:(view:string) => void}) => {
   const [agentsList, setAgentList] = React.useState<{ name: any; _id: any; }[]>( [
     {
       name: "Guy",
-      _id: "agentId",
+      _id: "GuyagentId",
     },
     {
       name: "Itsik",
-      _id: "agentId",
+      _id: "ItsikagentId",
     },
     {
       name: "Yaniv",
-      _id: "agentId",
+      _id: "YanivagentId",
     },
     {
       name: "Ami",
-      _id: "agentId",
+      _id: "AmiagentId",
     },
     {
       name: "Dan",
-      _id: "agentId",
+      _id: "DanagentId",
     },
   ]);
 
@@ -235,7 +257,7 @@ const TaskPage = (props:{changeView:(view:string) => void}) => {
       console.log('set new object to time line with time: ' + itemDragObject.time.toString());
     } else if (itemDragObject.eventType === "resize") {
       
-      console.log('set new object to time line with dureation to the: '+ itemDragObject.edge + itemDragObject.time.toString());
+      console.log('set new object to time line with duration to the: '+ itemDragObject.edge + itemDragObject.time.toString());
     }
   };
   const [value, setValue] = React.useState({
@@ -269,8 +291,8 @@ const TaskPage = (props:{changeView:(view:string) => void}) => {
         task.type,
         task.state.stateHistory[0].currentState,
         task.description,
-        task.startTime,
-        task.duration,
+        task.executionDetails.startTime,
+        task.executionDetails.duration,
         task.assignmentInfo?.agentName || "task is not assigned",
         task.createdAt,
         task.updatedAt,

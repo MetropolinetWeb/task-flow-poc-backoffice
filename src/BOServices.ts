@@ -26,7 +26,7 @@ const BOServices = {
     return await axios.post(`${BOServices.baseUrl}tasks/assign`, content, BOServices.config);
   },
   assignTask: async (content: {}, taskId: string) => {
-    return await axios.post(`${BOServices.baseUrl}tasks/${taskId}/assign`, content, BOServices.config);
+    return await axios.put(`${BOServices.baseUrl}tasks/${taskId}/assign`, content, BOServices.config);
   },
   createNewTask: async (content: {}) => {
     return await axios.post(`${BOServices.baseUrl}tasks`, content, BOServices.config);

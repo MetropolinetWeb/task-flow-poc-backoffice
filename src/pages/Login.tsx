@@ -115,7 +115,6 @@ const Login = (props:{changeView:(view:string) => void}) => {
   }, [state.username, state.password]);
 
   const handleLogin = async () => {
-       debugger
     if(state.username && state.password) {
        const response = await BOServices.login(state.username,state.password);
         if(response && response.data && response.data.data.token){
