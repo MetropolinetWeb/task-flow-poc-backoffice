@@ -21,6 +21,7 @@
     "crud-ui": "^0.3.0",
     "interactjs": "^1.10.11",
     "lodash": "^4.17.21",
+    "metropolinet-forms-parser": "^0.4.0",
     "react": "^17.0.2",
     "react-calendar-timeline": "^0.27.0",
     "react-dom": "^17.0.2",

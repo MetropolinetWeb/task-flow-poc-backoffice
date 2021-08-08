@@ -151,6 +151,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 
   const filterArray = [state, id, name, type, description];
   const error = filterArray.filter((filter) => filter).length < 1;
+  
   const getCheckedFields = () => {
     let checked: string[] = [];
     Object.entries(filters).map(entry => {
