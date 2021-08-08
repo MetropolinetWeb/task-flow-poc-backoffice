@@ -7,6 +7,8 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
+import BOServices from '../BOServices';
+import Utils from '../utils';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -94,7 +96,7 @@ const reducer = (state: State, action: Action): State => {
   }
 }
 
-const Login = () => {
+const Login = (props:{changeView:(view:string) => void}) => {
   const classes = useStyles();
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -112,20 +114,29 @@ const Login = () => {
     }
   }, [state.username, state.password]);
 
-  const handleLogin = () => {
-
-debugger
-    if (state.username === 'abc@email.com' && state.password === 'password') {
-      dispatch({
-        type: 'loginSuccess',
-        payload: 'Login Successfully'
-      });
-    } else {
-      dispatch({
-        type: 'loginFailed',
-        payload: 'Incorrect username or password'
-      });
-    }
+  const handleLogin = async () => {
+       debugger
+    if(state.username && state.password) {
+       const response = await BOServices.login(state.username,state.password);
+        if(response && response.data && response.data.data.token){
+          Utils.setCookie("apiToken",response.data.data.token,1);
+          dispatch({
+            type: 'loginSuccess',
+            payload: 'Login Successfully'
+          });
+          props.changeView("Tasks");
+        } else{
+          dispatch({
+            type: 'loginFailed',
+            payload: response.data.data.errors
+          });
+        }  
+      }else{
+        dispatch({
+          type: 'loginFailed',
+          payload: 'Incorrect username or password'
+        });
+      }
   };
 
   const handleKeyPress = (event: React.KeyboardEvent) => {

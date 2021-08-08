@@ -18,7 +18,7 @@ function createData(Id:string, name: string, age: number, role: string) {
 }
 
 const cols = [{ field: 'Id' },{ field: 'Name' }, { field: 'Age' }, { field: 'Role'}];
-const UsersPage: React.FC = () => {
+const UsersPage = (props:{changeView:(view:string) => void}) => {
   const [dataRows, setDataRows] = useState<User[]>([]);
   const users = [
     {

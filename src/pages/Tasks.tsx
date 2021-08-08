@@ -91,7 +91,7 @@ const createTimeline = (tasks: Task[]) => {
 
 
 
-const TaskPage: FC = () => {
+const TaskPage = (props:{changeView:(view:string) => void}) => {
 
   const [dataRows, setDataRows] = useState<Data[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -136,9 +136,7 @@ const TaskPage: FC = () => {
 
   const fetchTasksData = async () => {
     //await getAgentsBySystemId(3);
-
     const response = await BOServices.getTaskBySystemId(3);
-
     const tasks: Task[] = response.data.data.tasks || [];
 
     setTasks(tasks);

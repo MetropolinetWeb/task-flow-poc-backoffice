@@ -1,11 +1,14 @@
 import axios from "axios";
+import Utils from "./utils";
 
+
+const token = Utils.getCookie("apiToken");
 const BOServices = {
   baseUrl: "http://localhost:8000/gateway/v1/",
   config: {
     headers: {
       Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTA2YTBhOWY2YTA3NTAwMzBjYzY4OTIiLCJpYXQiOjE2MjgxNjQ4MDMsImV4cCI6MTYzMDc1NjgwM30.0J-u5AAWTiYrD_O-m4P66KhicnQRbIiDNcE5QBhHWog",
+        "Bearer " + token,
     }
   },
     /* 
@@ -41,6 +44,15 @@ const BOServices = {
 */
   getAgentsBySystemType: async (systemType: number) => {
     return await axios.get(`${BOServices.baseUrl}agents/systems/${systemType}`, BOServices.config);
-  }
+  },
+
+  /* 
+▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧
+▧▧▧▧▧▧▧▧ User Service ▧▧▧▧▧▧▧▧▧▧▧
+▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧
+*/
+ login: async (userName: string, password: string) => {
+   return await axios.post(`${BOServices.baseUrl}users/login`, {email:userName,password:password},BOServices.config);
+ },
 }
 export default BOServices;
