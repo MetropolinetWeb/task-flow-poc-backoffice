@@ -88,10 +88,10 @@ const FullWidthTabs: React.FC<{selectedTask: Task}> = ({selectedTask}) => {
             <div className="floatL alignL">
               <p>Type:  <span className="blu">{selectedTask.type}</span></p>
               <p>State:  <span className="blu">{selectedTask.state.stateHistory[0].currentState}</span></p>
-              <p>Assign To:  <span className="blu">{selectedTask.assignment_info.agent_name}</span></p>
+              <p>Assign To:  <span className="blu">{selectedTask.assignmentInfo.agentName}</span></p>
               <p>Description:  <span className="blu">{selectedTask.description}</span></p>
-              <p>Start Time:  <span className="blu">{selectedTask.start_time}</span></p>
-              <p>Created Time:  <span className="blu">{selectedTask.created_at}</span></p>
+              <p>Start Time:  <span className="blu">{selectedTask.startTime}</span></p>
+              <p>Created Time:  <span className="blu">{selectedTask.createdAt}</span></p>
               <p>Created By:  <span className="blu">missing</span></p>
               <p>Estimated Duration:  <span className="blu">missing</span></p>
               <p>Last Date To Preform:  <span className="blu">missing</span></p>
@@ -103,7 +103,7 @@ const FullWidthTabs: React.FC<{selectedTask: Task}> = ({selectedTask}) => {
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
           <p>Agent Details</p>
-          {JSON.stringify(selectedTask.id.length < 1 ? null: selectedTask.assignment_info, null, 2)}
+          {JSON.stringify(selectedTask.id.length < 1 ? null: selectedTask.assignmentInfo, null, 2)}
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
         <p>More Information</p>

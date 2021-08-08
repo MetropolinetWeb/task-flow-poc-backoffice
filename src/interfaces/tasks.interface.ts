@@ -12,16 +12,16 @@ export interface Task {
       }[];
     };
     description: string;
-    start_time: number;
+    startTime: number;
     duration: number;
-    assignment_info: {
-      agent_id: string;
-      agent_name: string;
+    assignmentInfo: {
+      agentId: string;
+      agentName: string;
     };
     system: {
       name: string;
       type: string;
     }
-    created_at: string;
-    updated_at: string;
+    createdAt: string;
+    updatedAt: string;
   }

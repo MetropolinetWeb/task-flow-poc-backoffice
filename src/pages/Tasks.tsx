@@ -29,11 +29,11 @@ function createData(
   type: string,
   state: string,
   description: string,
-  start_time: number,
+  startTime: number,
   duration: number,
-  assignment_info: string,
-  created_at: string,
-  updated_at: string,
+  assignmentInfo: string,
+  createdAt: string,
+  updatedAt: string,
   system: string
 ): Data {
   return {
@@ -42,11 +42,11 @@ function createData(
     type,
     state,
     description,
-    start_time,
+    startTime,
     duration,
-    assignment_info,
-    created_at,
-    updated_at,
+    assignmentInfo,
+    createdAt,
+    updatedAt,
     system,
   };
 }
@@ -55,7 +55,7 @@ const createTimeline = (tasks: Task[]) => {
   const createTimelineGroups = tasks.map((task, index) => {
     return {
       id: index,
-      title: task.assignment_info?.agent_name,
+      title: task.assignmentInfo?.agentName,
     };
   });
 
@@ -64,7 +64,7 @@ const createTimeline = (tasks: Task[]) => {
       id: task?.id,
       group: '',//task.assignment_info.agent_name,
       title: task.name,
-      start_time: moment(task.start_time).add(2, "hour"),
+      start_time: moment(task.startTime).add(2, "hour"),
       end_time: moment().add(task.duration, "hour"),
       canMove: true,
       canResize: true,
@@ -97,17 +97,17 @@ const TaskPage = (props:{changeView:(view:string) => void}) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedTask, setSelectedTask] = useState<Task>(
     {
-      assignment_info: {
-        agent_id: "",
-        agent_name: "",
+      assignmentInfo: {
+        agentId: "",
+        agentName: "",
       },
-      created_at: "0",
+      createdAt: "0",
       description: "",
       duration: 0,
       name: "",
       type: "",
-      updated_at: "0",
-      start_time: 0,
+      updatedAt: "0",
+      startTime: 0,
       system: {
         name: "",
         type: "0",
@@ -147,11 +147,11 @@ const TaskPage = (props:{changeView:(view:string) => void}) => {
         task.type,
         task.state.stateHistory[0].currentState,
         task.description,
-        task.start_time,
+        task.startTime,
         task.duration,
-        task.assignment_info?.agent_name || "task is not assigned",
-        task.created_at,
-        task.updated_at,
+        task.assignmentInfo?.agentName || "task is not assigned",
+        task.createdAt,
+        task.updatedAt,
         task.system.type
       );
     });
@@ -269,11 +269,11 @@ const TaskPage = (props:{changeView:(view:string) => void}) => {
         task.type,
         task.state.stateHistory[0].currentState,
         task.description,
-        task.start_time,
+        task.startTime,
         task.duration,
-        task.assignment_info?.agent_name || "task is not assigned",
-        task.created_at,
-        task.updated_at,
+        task.assignmentInfo?.agentName || "task is not assigned",
+        task.createdAt,
+        task.updatedAt,
         task.system.type
       );
     });

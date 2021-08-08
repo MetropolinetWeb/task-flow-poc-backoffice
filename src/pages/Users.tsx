@@ -29,8 +29,8 @@ const UsersPage = (props:{changeView:(view:string) => void}) => {
         name: 'Collectors',
         type: ''
       },
-      created_at: '',
-      updated_at: ''
+      createdAt: '',
+      updatedAt: ''
     },
     {
       id: '0',
@@ -40,8 +40,8 @@ const UsersPage = (props:{changeView:(view:string) => void}) => {
         name: 'Collectors',
         type: ''
       },
-      created_at: '',
-      updated_at: ''
+      createdAt: '',
+      updatedAt: ''
     }
   ]
   return (<div className="container">

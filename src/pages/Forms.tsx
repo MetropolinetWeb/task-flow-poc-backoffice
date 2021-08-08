@@ -263,7 +263,7 @@ const dummyForm = {
   updated_at: '2021-08-04T12:33:03.055+0000',
   __v: 0,
 };
-const FormsPage: React.FC = () => {
+const FormsPage = (props:{changeView:(view:string) => void}) => {
   const [form, setForm] = useState({});
 
   const fetchForms = async () => {
