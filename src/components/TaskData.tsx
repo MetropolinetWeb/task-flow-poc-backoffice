@@ -21,8 +21,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import { Data } from "../interfaces/tasks-data.interface";
 import FullScreenDialog from "../components/FullScreenDialog";
-import { FormControl, FormGroup, FormHelperText, FormLabel, MenuItem, Select, TextField } from "@material-ui/core";
-import { useEffect } from "react";
+import { FormControl, FormGroup, FormLabel, MenuItem, Select, TextField } from "@material-ui/core";
+
 
 import _ from "lodash";
 import BOServices from '../BOServices';
@@ -400,6 +400,7 @@ interface TableProps {
       name: any;
       _id: any;
   }[];
+  setAgentList:() => void;
 }
 
 const EnhancedTable: React.FC<TableProps> = ({
@@ -409,7 +410,8 @@ const EnhancedTable: React.FC<TableProps> = ({
   handleClose,
   open,
   submitSearch,
-  agentsList
+  agentsList,
+  setAgentList
 }) => {
   const classes = useStyles();
   const [order, setOrder] = React.useState<Order>("asc");
@@ -503,29 +505,7 @@ const EnhancedTable: React.FC<TableProps> = ({
   };
 
 
-  const agentList = [
-    {
-      name: "Guy",
-      _id: "agentId",
-    },
-    {
-      name: "Itsik",
-      _id: "agentId",
-    },
-    {
-      name: "Yaniv",
-      _id: "agentId",
-    },
-    {
-      name: "Ami",
-      _id: "agentId",
-    },
-    {
-      name: "Dan",
-      _id: "agentId",
-    },
-  ];
-
+  
   const [agentSelected, setAgentSelected] = React.useState('');
 
   return (

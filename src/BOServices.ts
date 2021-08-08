@@ -1,40 +1,41 @@
 import axios from "axios";
+import Utils from "./utils";
 
+
+const token = Utils.getCookie("apiToken");
 const BOServices = {
   baseUrl: "http://localhost:8000/gateway/v1/",
   config: {
     headers: {
       Authorization:
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTAyODJlZDM2ZWU3NzAwMzFmODQzYmIiLCJpYXQiOjE2MjgwNjMwODcsImV4cCI6MTYzMDY1NTA4N30.TVaWxyK5jbd3VILeqydfy5CoWIp5onU4wOUttlYdxR0",
+        "Bearer " + token,
     }
   },
+    /* 
+▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧
+▧▧▧▧▧▧▧▧ Task Service ▧▧▧▧▧▧▧▧▧▧▧
+▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧
+*/
   taskSearch: async (content: {}) => {
-    const result = await axios.post(`${BOServices.baseUrl}tasks/search`, content, BOServices.config);
-    return result;
+    return await axios.post(`${BOServices.baseUrl}tasks/search`, content, BOServices.config);
   },
   getTaskBySystemId: async (systemId: number) => {
-    const result = await axios.get(`${BOServices.baseUrl}tasks/systems/${systemId}`, BOServices.config);
-    return result;
+    return await axios.get(`${BOServices.baseUrl}tasks/systems/${systemId}`, BOServices.config);
   },
   assignMultipleTasks: async (content: {}) => {
-    const result = await axios.post(`${BOServices.baseUrl}tasks/assign`, content, BOServices.config);
-    return result;
+    return await axios.post(`${BOServices.baseUrl}tasks/assign`, content, BOServices.config);
   },
   assignTask: async (content: {}, taskId: string) => {
-    const result = await axios.post(`${BOServices.baseUrl}tasks/${taskId}/assign`, content, BOServices.config);
-    return result;
+    return await axios.post(`${BOServices.baseUrl}tasks/${taskId}/assign`, content, BOServices.config);
   },
   createNewTask: async (content: {}) => {
-    const result = await axios.post(`${BOServices.baseUrl}tasks`, content, BOServices.config);
-    return result;
+    return await axios.post(`${BOServices.baseUrl}tasks`, content, BOServices.config);
   },
   deleteTask: async (taskId: string) => {
-    const result = await axios.delete(`${BOServices.baseUrl}tasks/${taskId}`, BOServices.config);
-    return result;
+    return await axios.delete(`${BOServices.baseUrl}tasks/${taskId}`, BOServices.config);
   },
   editTask: async (taskId: string) => {
-    const result = await axios.put(`${BOServices.baseUrl}tasks/${taskId}`, BOServices.config);
-    return result;
+    return await axios.put(`${BOServices.baseUrl}tasks/${taskId}`, BOServices.config);
   },
   /* 
 ▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧
@@ -53,6 +54,15 @@ const BOServices = {
   getFormById: async (formId: string) => {
     const result = await axios.get(`${BOServices.baseUrl}forms/${formId}`, BOServices.config);
     return result;
-  }
+  },
+
+  /* 
+▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧
+▧▧▧▧▧▧▧▧ User Service ▧▧▧▧▧▧▧▧▧▧▧
+▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧▧
+*/
+ login: async (userName: string, password: string) => {
+   return await axios.post(`${BOServices.baseUrl}users/login`, {email:userName,password:password},BOServices.config);
+ },
 }
 export default BOServices;

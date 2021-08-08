@@ -12,9 +12,11 @@ import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import moment from "moment";
 import { Data } from "../interfaces/tasks-data.interface";
 import { Task } from "../interfaces/tasks.interface";
-
+import NewTaskDialog from "../DialogComponents/NewTask";
+import DeleteConfrimDialog from "../DialogComponents/DeleteConfirm";
 import _ from "lodash";
 import BOServices from '../BOServices';
+import EditTaskDialog from "../DialogComponents/EditTask";
 
 const groups = [
   { id: "Guy", title: "Guy", rightTitle: "Agent", stackItems: true },
@@ -86,7 +88,11 @@ const createTimeline = (tasks: Task[]) => {
   return { createTimelineTasks, createTimelineGroups };
 };
 
-const TaskPage: FC = () => {
+
+
+
+const TaskPage = (props:{changeView:(view:string) => void}) => {
+
   const [dataRows, setDataRows] = useState<Data[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedTask, setSelectedTask] = useState<Task>(
@@ -129,10 +135,8 @@ const TaskPage: FC = () => {
   };
 
   const fetchTasksData = async () => {
-    await getAgentsBySystemId(3);
-
+    //await getAgentsBySystemId(3);
     const response = await BOServices.getTaskBySystemId(3);
-
     const tasks: Task[] = response.data.data.tasks || [];
 
     setTasks(tasks);
@@ -155,19 +159,40 @@ const TaskPage: FC = () => {
   };
 
   
-  const [agentsList, setAgentList] = React.useState<{ name: any; _id: any; }[]>([]);
+  const [agentsList, setAgentList] = React.useState<{ name: any; _id: any; }[]>( [
+    {
+      name: "Guy",
+      _id: "agentId",
+    },
+    {
+      name: "Itsik",
+      _id: "agentId",
+    },
+    {
+      name: "Yaniv",
+      _id: "agentId",
+    },
+    {
+      name: "Ami",
+      _id: "agentId",
+    },
+    {
+      name: "Dan",
+      _id: "agentId",
+    },
+  ]);
 
-  const getAgentsBySystemId = async (systemType: number) => {
-    const {data} = await BOServices.getAgentsBySystemType(systemType);
-    const {agents} = data.data;
+  //const getAgentsBySystemId = async (systemType: number) => {
+  //  const {data} = await BOServices.getAgentsBySystemType(systemType);
+  //  const {agents} = data.data;
 
-    const list = _.map(agents, (agent) => _.assign({
-      name: _.get(agent, 'name'),
-      _id: _.get(agent, '_id')
-    },{}));
+  //  const list = _.map(agents, (agent) => _.assign({
+  //    name: _.get(agent, 'name'),
+  //    _id: _.get(agent, '_id')
+  //  },{}));
 
-    setAgentList(list);  
-  }
+  //  setAgentList(list);  
+  //}
 
   useEffect(() => {
     fetchTasksData();
@@ -175,13 +200,34 @@ const TaskPage: FC = () => {
   }, []);
 
   const [open, setOpen] = React.useState(false);
+  const [openNewTask, setOpenNewTask] = React.useState(false);
+  const [openDeleteConfirm, setOpenDeleteConfirm] = React.useState(false);
+  const [openEditTask, setOpenEditTask] = React.useState(false);
+
 
   const handleClickOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
+  };
+  const handleNewTaskClickOpen = () => {
+    setOpenNewTask(true);
+  };
+  const handleNewTaskClose = () => {
+    setOpenNewTask(false);
+  };
+  const handleDeleteConfirmClickOpen = () => {
+    setOpenDeleteConfirm(true);
+  };
+  const handleDeleteConfirmClose = () => {
+    setOpenDeleteConfirm(false);
+  };
+  const handleEditTaskClickOpen = () => {
+    setOpenEditTask(true);
+  };
+  const handleEditTaskClose = () => {
+    setOpenEditTask(false);
   };
 
   const onTaskDrag = (itemDragObject: any) => {
@@ -207,13 +253,16 @@ const TaskPage: FC = () => {
     });
     
     const tasks: Task[] = results.data.data.tasks || [];
-    if(tasks.length < 1) {
+
+    const source = _.map(tasks, '_source');
+
+    if (source.length < 1) {
       alert('Your search results came empty');
       return null
     }
 
-    setTasks(tasks);
-    const modifiedTasks = tasks.map((task: Task) => {
+    setTasks(source);
+    const modifiedTasks = source.map((task: Task) => {
       return createData(
         task.id,
         task.name,
@@ -251,6 +300,7 @@ const TaskPage: FC = () => {
               (itemId, e, time) => {
                 //@ts-ignore
                 setSelectedTask(tasks.find((task) => task.id === itemId));
+                alert(selectedTask);
                 }}>
               <TimelineHeaders>
                 <SidebarHeader>
@@ -284,20 +334,24 @@ const TaskPage: FC = () => {
             >Search</Button>
           </div>         
           <div className="floatL">
-            <Button color="primary"><ListItemIcon><LibraryAddIcon />NEW</ListItemIcon></Button>
+            <Button color="primary" onClick={handleNewTaskClickOpen}><ListItemIcon><LibraryAddIcon />NEW</ListItemIcon></Button>
               <Box hidden={showActions} className="floatR">
-                <Button color="primary"><ListItemIcon><DeleteIcon />DELETE</ListItemIcon></Button>
-                <Button color="primary"><ListItemIcon><UpdateIcon />EDIT</ListItemIcon></Button>
+                <Button color="primary" onClick={handleDeleteConfirmClickOpen}><ListItemIcon><DeleteIcon />DELETE</ListItemIcon></Button>
+                <Button color="primary" onClick={handleEditTaskClickOpen}><ListItemIcon><UpdateIcon />EDIT</ListItemIcon></Button>
                 <Button color="primary" onClick={handleClickOpen}><ListItemIcon><AssignmentIndIcon />ASSIGN</ListItemIcon></Button>
               </Box>
 
           </div>
           <PanelGroup spacing={5} panelWidths={[{ size: 1450, minSize: 800},{ size: 450, minSize: 450}]}>
-              <TaskData agentsList={agentsList} submitSearch={submitSearch} dataRows={dataRows} setButtons={callSetShowActions} handleClose={handleClose} handleClickOpen={handleClickOpen} open={open}/>
+          <TaskData agentsList={agentsList} submitSearch={submitSearch}
+                    dataRows={dataRows} setButtons={callSetShowActions} handleClose={handleClose}
+                   handleClickOpen={handleClickOpen} open={open} setAgentList={() => setAgentList} />
             <FullWidthTabs selectedTask={selectedTask} />
           </PanelGroup>
 
-         
+        <NewTaskDialog open={openNewTask} handleNewTaskClose={handleNewTaskClose} />
+        <DeleteConfrimDialog open={openDeleteConfirm} handleDeleteConfirmClose={handleDeleteConfirmClose} taskId={selectedTask.id} />
+        <EditTaskDialog open={openEditTask} handleEditTaskClose={handleEditTaskClose} task={selectedTask} />
         </div>
     </div>
   );
