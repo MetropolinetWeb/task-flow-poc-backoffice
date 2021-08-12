@@ -7,7 +7,7 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { Task } from '../interfaces/tasks.interface';
-
+import StateFlow from '../components/StateFlow';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -78,7 +78,7 @@ const FullWidthTabs = (props: {selectedTask: Task}) => {
         >
           <Tab label="Task Details" {...a11yProps(0)} />
           <Tab label="Agent Details" {...a11yProps(1)} />
-          <Tab label="Info" {...a11yProps(2)} />
+          <Tab label="State" {...a11yProps(2)} />
         </Tabs>
       </AppBar>
       <SwipeableViews axis={theme.direction === 'rtl' ? 'x-reverse' : 'x'} index={value} onChangeIndex={handleChangeIndex}>
@@ -106,7 +106,7 @@ const FullWidthTabs = (props: {selectedTask: Task}) => {
           {JSON.stringify(props.selectedTask.id.length < 1 ? null: props.selectedTask.assignmentInfo, null, 2)}
         </TabPanel>
         <TabPanel value={value} index={2} dir={theme.direction}>
-        <p>More Information</p>
+        <StateFlow />
         </TabPanel>
       </SwipeableViews>
     </div>

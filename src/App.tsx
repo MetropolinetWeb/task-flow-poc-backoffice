@@ -1,9 +1,7 @@
 
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useEffect }from 'react';
 import './App.css';
 import 'react-calendar-timeline/lib/Timeline.css';
-
 import SideMenu from './components/SideMenu';
 import UsersPage from './pages/Users';
 import AgentsPage from './pages/Agents';
@@ -15,7 +13,7 @@ import SystemsPage from './pages/Systems';
 import DashboardsPage from './pages/Dashboards';
 import Login from './pages/Login';
 import Utils from './utils';
-import { useEffect } from 'react';
+
 
 
 

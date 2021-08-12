@@ -1,5 +1,6 @@
 import React from "react";
-import Timeline , {TimelineHeaders,SidebarHeader,DateHeader}from "react-calendar-timeline";
+// import Timeline , {TimelineHeaders,SidebarHeader,DateHeader}from "react-calendar-timeline";
+import TimeLine from "react-gantt-timeline";
 import { FC, useState, useEffect } from "react";
 import PanelGroup from "react-panelgroup";
 import FullWidthTabs from "../components/FullWidthTabs";
@@ -18,10 +19,58 @@ import _ from "lodash";
 import BOServices from '../BOServices';
 import EditTaskDialog from "../DialogComponents/EditTask";
 
-const groups = [
-  { id: "Guy", title: "Guy", rightTitle: "Agent", stackItems: true },
-  { id: "Itsik", title: "Itsik", rightTitle: "Agent", stackItems: true },
-];
+// const groups = [
+//   { id: "Guy", title: "Guy" },
+//   { id: "Itsik", title: "Itsik" },
+// ];
+// const items = [
+//   {
+//     id: 1,
+//     group: 1,
+//     title: 'item 1',
+//     start_time: moment.now(),
+//     end_time: moment().add(1, 'hour')
+//   },
+//   {
+//     id: 2,
+//     group: 2,
+//     title: 'item 2',
+//     start_time: moment().add(-0.5, 'hour'),
+//     end_time: moment().add(0.5, 'hour')
+//   },
+//   {
+//     id: 3,
+//     group: 1,
+//     title: 'item 3',
+//     start_time: moment().add(2, 'hour'),
+//     end_time: moment().add(3, 'hour')
+//   }
+// ];
+
+const data=[
+{
+  id:1,start:new Date(), 
+  end:new Date()+1 ,
+  name:'Demo Task 1'
+},
+{
+  id:2,
+  start:new Date(), 
+  end:new Date()+1 ,
+  name:'Demo Task 2'
+}]
+
+let links=[ 
+{
+  id:1,
+  start:1, 
+  end:2
+},
+{
+  id:2,
+  start:1, 
+  end:3
+}]
 
 function createData(
   id: string,
@@ -60,13 +109,16 @@ const createTimeline = (tasks: Task[]) => {
   });
 
   const createTimelineTasks = tasks.map((task: Task, index) => {
-    debugger
+    var start_time =  moment(task.executionDetails.startTime).add(2, "hour");
+    var end_time = moment().add(task.executionDetails.duration, "hour");
+
+    console.log(start_time, end_time)
     return {
       id: task?.id,
-      group: '',//task.assignment_info.agent_name,
+      group: task.assignmentInfo?.agentName,
       title: task.name,
-      start_time: moment(task.executionDetails.startTime).add(2, "hour"),
-      end_time: moment().add(task.executionDetails.duration, "hour"),
+      start_time: moment().add(2, "hour"),
+      end_time: moment().add(4, "hour"),
       canMove: true,
       canResize: true,
       canChangeGroup: true,
@@ -88,8 +140,6 @@ const createTimeline = (tasks: Task[]) => {
 
   return { createTimelineTasks, createTimelineGroups };
 };
-
-
 
 
 const TaskPage = (props:{changeView:(view:string) => void}) => {
@@ -204,18 +254,6 @@ const TaskPage = (props:{changeView:(view:string) => void}) => {
     },
   ]);
 
-  //const getAgentsBySystemId = async (systemType: number) => {
-  //  const {data} = await BOServices.getAgentsBySystemType(systemType);
-  //  const {agents} = data.data;
-
-  //  const list = _.map(agents, (agent) => _.assign({
-  //    name: _.get(agent, 'name'),
-  //    _id: _.get(agent, '_id')
-  //  },{}));
-
-  //  setAgentList(list);  
-  //}
-
   useEffect(() => {
     fetchTasksData();
     //setLoading(false);
@@ -307,8 +345,11 @@ const TaskPage = (props:{changeView:(view:string) => void}) => {
   return (
     <div>
       {/*{loading ? ("loading") : ()}*/}
-       <div>
-            <Timeline groups={groups} items={createTimeline(tasks).createTimelineTasks}
+      <div>
+             {/* <Timeline groups={groups} 
+              items={items}
+              defaultTimeStart={moment().add(-12, "hour")} 
+              defaultTimeEnd={moment().add(12, "hour")} 
               sidebarWidth={100}
               rightSidebarContent={'Agents'}
               canResize={"both"}
@@ -316,13 +357,11 @@ const TaskPage = (props:{changeView:(view:string) => void}) => {
                 //@ts-ignore
                 onTaskDrag(itemDragObject);
               }}
-              defaultTimeStart={moment().add(-12, "hour")} 
-              defaultTimeEnd={moment().add(12, "hour")} 
+              
               onItemSelect={
               (itemId, e, time) => {
                 //@ts-ignore
                 setSelectedTask(tasks.find((task) => task.id === itemId));
-                alert(selectedTask);
                 }}>
               <TimelineHeaders>
                 <SidebarHeader>
@@ -333,8 +372,9 @@ const TaskPage = (props:{changeView:(view:string) => void}) => {
                   <DateHeader unit="primaryHeader" />
                   <DateHeader />
               </TimelineHeaders>
-              </Timeline>
+              </Timeline> */}
                   {/*search*/}
+                  <TimeLine data={data} links={links} />
           <div style={{ padding: "1rem", float: "right", margin: "0.5rem" }}>
             <TextField
               id="standard-search"
